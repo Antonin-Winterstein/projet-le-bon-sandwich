@@ -3,6 +3,6 @@
 return [
     'settings' => [
       'displayErrorDetails' => true,
-      'dbfile' => __DIR__ . '/dbconfig.ini'
+      'dbfile' => __DIR__ . '\conf.ini'
     ]
 ];

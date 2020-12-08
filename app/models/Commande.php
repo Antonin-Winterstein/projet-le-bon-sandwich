@@ -7,6 +7,6 @@ use \Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;  
 
 class Commande extends Model {
-  protected $table = 'item';
+  protected $table = 'commande';
   protected $primaryKey = 'id';
 }
