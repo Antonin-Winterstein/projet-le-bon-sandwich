@@ -1,11 +1,13 @@
 {
 	"require": {
 		"slim/slim": "3.*",
-		"php": ">=7.0"
+		"php": ">=7.0",
+		"illuminate/database": "^8.0"
 	},
 	"autoload": {
 		"psr-4": {
-			"lbs\\command\\api\\": "."
+			"lbs\\command\\api\\": ".",
+			"application\\": "../app"
 		}
 	}
 }
