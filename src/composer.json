@@ -6,8 +6,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"lbs\\command\\api\\": ".",
-			"application\\": "../app"
+			"": "."
 		}
 	}
 }

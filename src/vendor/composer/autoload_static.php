@@ -25,14 +25,6 @@ class ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86
         array (
             'voku\\' => 5,
         ),
-        'l' => 
-        array (
-            'lbs\\command\\api\\' => 16,
-        ),
-        'a' => 
-        array (
-            'application\\' => 12,
-        ),
         'S' => 
         array (
             'Symfony\\Polyfill\\Php80\\' => 23,
@@ -79,14 +71,6 @@ class ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86
         'voku\\' => 
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
-        ),
-        'lbs\\command\\api\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/',
-        ),
-        'application\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/../app',
         ),
         'Symfony\\Polyfill\\Php80\\' => 
         array (
@@ -180,6 +164,10 @@ class ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86
         ),
     );
 
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/../..' . '/',
+    );
+
     public static $prefixesPsr0 = array (
         'P' => 
         array (
@@ -205,6 +193,7 @@ class ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit7dd8f22f7f466040ae4dcffd90c9df86::$classMap;
 
