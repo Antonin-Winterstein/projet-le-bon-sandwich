@@ -24,5 +24,5 @@ $app->get('/commandes/{id}[/]', \lbs\command\api\controller\CommandController::c
 
 
 
-//* Déclenche le traitement par le framework de la requête courante et la comparer dans l'ordre de chacune des routes
+//* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
 $app->run();
