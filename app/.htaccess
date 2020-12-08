@@ -1,0 +1,9 @@
+RewriteEngine On
+
+RewriteCond ${REQUEST_FILENAME} !-d
+RewriteCond ${REQUEST_FILENAME} !-f
+
+# Permet de pas avoir index.php dans l'url, exemple :
+# http://localhost/TD1_ROUTES_JSON/app/commandes
+
+RewriteRule ^ index.php [QSA,L]
