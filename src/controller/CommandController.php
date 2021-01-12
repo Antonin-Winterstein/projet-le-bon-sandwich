@@ -3,8 +3,10 @@
 namespace controller;
 
 use models\Commande;
+use utils\Writer;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommandController {
 
@@ -16,18 +18,14 @@ class CommandController {
   // ];
 
   public function listCommands(Request $rq, Response $rs, array $args) : Response {
-    $commands = Commande::select('id', 'mail', 'created_at', 'montant')->get();
+    $commandes = Commande::select('id', 'mail', 'created_at', 'montant')->get();
 
-    foreach ($commands as $command) {
-      $command['date_commande'] = date('d M Y', strtotime($command['created_at']));
-      $command['mail_client'] = $command['mail'];
-      unset($command['created_at'], $command['mail']);
-    }
-
-    $data = ["type"=>"collection", "count"=> count($commands), "commandes" => $commands];
-
-    $rs = $rs->withHeader('Content-Type', 'application/json');
-    $rs->getBody()->write(json_encode($data));
+    $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+    $rs->getBody()->write(json_encode ( [
+      'type' => 'collection',
+      'count' => count($commandes),
+      'commandes' => $commandes->toArray()
+    ]));
 
     return $rs;
   }
@@ -36,19 +34,21 @@ class CommandController {
 
     $id = $args['id'];
 
-    $command = Commande::find($id);
+    try {
+      $commande = Commande::select(['id', 'livraison', 'nom', 'mail', 'status', 'montant'])->with('items')->where('id', '=', $id)->firstOrFail();
 
-    if ($command) {
-      $data = ["type" => "ressource", "commande" => $command->first()];
-    }else{
-      $rs = $rs->withStatus(404);
-      $data = ["type"=>"error", "code"=>404, "msg"=>"commande $id NOT FOUND"];
+      $data = [
+        'type' => 'resource',
+        'commande' => $commande->toArray()
+      ];
+
+      return Writer::json_output($rs, 200, $data);
+
+    } catch(ModelNotFoundException $e) {
+
+      // ($this->c->get('logger.error'))->error("command $id not found", [404]);
+      return Writer::json_error($rs, 404, "command $id not found");
     }
-        
-    $rs = $rs->withHeader('Content-Type', 'application/json');
-    $rs->getBody()->write(json_encode($data));
-
-    return $rs;
   }
   
 }
