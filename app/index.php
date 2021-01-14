@@ -26,9 +26,15 @@ $db->bootEloquent();           /* établir la connexion */
 
 //* Les objets de type requête
 
-$app->get('/commandes[/]', CommandController::class . ':listCommands');
+$app->get('/commandes[/]', CommandController::class . ':listCommandes');
 
-$app->get('/commandes/{id}[/]', CommandController::class . ':uneCommande');
+$app->get('/commandes/{id}[/]', CommandController::class . ':uneCommande')
+    ->setName('commande');
+
+
+/* TD3 : POST */
+
+$app->post('/td3/commandes[/]', CommandController::class . ':ajouterCommande');
 
 //! Sur Internet ou Postman écrire une URL de ce genre pour lister toutes les commandes :
 //! http://localhost/TD1_ROUTES_JSON/app/commandes

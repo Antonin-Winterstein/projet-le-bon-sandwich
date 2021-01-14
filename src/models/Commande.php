@@ -7,11 +7,11 @@ use \Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Commande extends Model {
-  // const CREATED = 1;
-  // const PAID = 2;
-  // const PREPARING = 3;
-  // const READY = 4;
-  // const COMPLETED = 5;
+  const CREATED = 1;
+  const PAID = 2;
+  const PREPARING = 3;
+  const READY = 4;
+  const COMPLETED = 5;
 
   protected $table = 'commande';
   protected $primaryKey = 'id';

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '756e8268b1a1cc0cd63653fd0239c9177a2df3ee',
+    'reference' => 'b3992d37598f2be622b1e16213bbb53aa616d209',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,16 @@
       'aliases' => 
       array (
       ),
-      'reference' => '756e8268b1a1cc0cd63653fd0239c9177a2df3ee',
+      'reference' => 'b3992d37598f2be622b1e16213bbb53aa616d209',
+    ),
+    'brick/math' => 
+    array (
+      'pretty_version' => '0.9.1',
+      'version' => '0.9.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '283a40c901101e66de7061bd359252c013dcc43c',
     ),
     'doctrine/inflector' => 
     array (
@@ -31,8 +40,8 @@
     ),
     'illuminate/collections' => 
     array (
-      'pretty_version' => 'v8.22.0',
-      'version' => '8.22.0.0',
+      'pretty_version' => 'v8.22.1',
+      'version' => '8.22.1.0',
       'aliases' => 
       array (
       ),
@@ -40,8 +49,8 @@
     ),
     'illuminate/container' => 
     array (
-      'pretty_version' => 'v8.22.0',
-      'version' => '8.22.0.0',
+      'pretty_version' => 'v8.22.1',
+      'version' => '8.22.1.0',
       'aliases' => 
       array (
       ),
@@ -49,8 +58,8 @@
     ),
     'illuminate/contracts' => 
     array (
-      'pretty_version' => 'v8.22.0',
-      'version' => '8.22.0.0',
+      'pretty_version' => 'v8.22.1',
+      'version' => '8.22.1.0',
       'aliases' => 
       array (
       ),
@@ -58,17 +67,17 @@
     ),
     'illuminate/database' => 
     array (
-      'pretty_version' => 'v8.22.0',
-      'version' => '8.22.0.0',
+      'pretty_version' => 'v8.22.1',
+      'version' => '8.22.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c6ad4bdfa94c259d5ece11c523172238f01dfa00',
+      'reference' => '4a2040c25d28315be005784a9ea4c2efb2a95a27',
     ),
     'illuminate/macroable' => 
     array (
-      'pretty_version' => 'v8.22.0',
-      'version' => '8.22.0.0',
+      'pretty_version' => 'v8.22.1',
+      'version' => '8.22.1.0',
       'aliases' => 
       array (
       ),
@@ -76,12 +85,12 @@
     ),
     'illuminate/support' => 
     array (
-      'pretty_version' => 'v8.22.0',
-      'version' => '8.22.0.0',
+      'pretty_version' => 'v8.22.1',
+      'version' => '8.22.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '880b330c516f3e5cd9a096b9f476e3c82db2eb93',
+      'reference' => '6a516676a83d2a73c46eaf7907f730e86ef60da5',
     ),
     'nesbot/carbon' => 
     array (
@@ -157,6 +166,31 @@
       array (
       ),
       'reference' => '408d5eafb83c57f6365a3ca330ff23aa4a5fa39b',
+    ),
+    'ramsey/collection' => 
+    array (
+      'pretty_version' => '1.1.1',
+      'version' => '1.1.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '24d93aefb2cd786b7edd9f45b554aea20b28b9b1',
+    ),
+    'ramsey/uuid' => 
+    array (
+      'pretty_version' => '4.1.1',
+      'version' => '4.1.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'cd4032040a750077205918c86049aa0f43d22947',
+    ),
+    'rhumsaa/uuid' => 
+    array (
+      'replaced' => 
+      array (
+        0 => '4.1.1',
+      ),
     ),
     'slim/slim' => 
     array (

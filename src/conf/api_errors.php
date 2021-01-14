@@ -13,9 +13,9 @@ return [
     };
   },
 
-  'phpErrorHandler' => function($c) {
-    return function ($rq, $rs, $error) use ($c) {
-      return errors\Internal::error($c, $rq, $rs, $error);
-    };
-  }
+  // 'phpErrorHandler' => function($c) {
+  //   return function ($rq, $rs, $error) use ($c) {
+  //     return errors\Internal::error($c, $rq, $rs, $error);
+  //   };
+  // }
 ];
