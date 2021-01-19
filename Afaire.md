@@ -1,6 +1,7 @@
 
 # Conception
 - Modele des ressources pour api
+  - Sandwich
   - Catalogue
   - Commande
 - Users stories (tableau)
