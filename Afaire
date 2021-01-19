@@ -1,6 +1,6 @@
 Réponse compléte de l'API
 - sandwichs/[id]
-- sandwichs
-- categorie
+- sandwichs/
+- avec categorie
 - avec attribut en parametre
 - pagination
