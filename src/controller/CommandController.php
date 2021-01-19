@@ -2,9 +2,13 @@
 
 namespace controller;
 
+use Slim\Router;
+use utils\Writer;
 use models\Commande;
+use Ramsey\Uuid\Uuid;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommandController {
 
@@ -15,19 +19,23 @@ class CommandController {
   //   ["id" =>"01RF56TH", "mail_client" =>"m@mmm.fr", "date_commande" =>"4-12-2020", "montant" =>30.0]
   // ];
 
-  public function listCommands(Request $rq, Response $rs, array $args) : Response {
-    $commands = Commande::select('id', 'mail', 'created_at', 'montant')->get();
+  private $c;
 
-    foreach ($commands as $command) {
-      $command['date_commande'] = date('d M Y', strtotime($command['created_at']));
-      $command['mail_client'] = $command['mail'];
-      unset($command['created_at'], $command['mail']);
-    }
+  public function __construct(\Slim\Container $c){
 
-    $data = ["type"=>"collection", "count"=> count($commands), "commandes" => $commands];
+    $this->c = $c;
 
-    $rs = $rs->withHeader('Content-Type', 'application/json');
-    $rs->getBody()->write(json_encode($data));
+  }
+
+  public function listCommandes(Request $rq, Response $rs, array $args) : Response {
+    $commandes = Commande::select('id', 'mail', 'created_at', 'montant')->get();
+
+    $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+    $rs->getBody()->write(json_encode ( [
+      'type' => 'collection',
+      'count' => count($commandes),
+      'commandes' => $commandes->toArray()
+    ]));
 
     return $rs;
   }
@@ -36,19 +44,78 @@ class CommandController {
 
     $id = $args['id'];
 
-    $command = Commande::find($id);
+    try {
+      $commande = Commande::select(['id', 'livraison', 'nom', 'mail', 'status', 'montant'])->with('items')->where('id', '=', $id)->firstOrFail();
 
-    if ($command) {
-      $data = ["type" => "ressource", "commande" => $command->first()];
-    }else{
-      $rs = $rs->withStatus(404);
-      $data = ["type"=>"error", "code"=>404, "msg"=>"commande $id NOT FOUND"];
+      $data = [
+        'type' => 'resource',
+        'commande' => $commande->toArray()
+      ];
+
+      return Writer::json_output($rs, 200, $data);
+
+    } catch(ModelNotFoundException $e) {
+
+      // ($this->c->get('logger.error'))->error("command $id not found", [404]);
+      return Writer::json_error($rs, 404, "command $id not found");
     }
-        
-    $rs = $rs->withHeader('Content-Type', 'application/json');
-    $rs->getBody()->write(json_encode($data));
-
-    return $rs;
   }
+
+    /**
+     * 
+     * public function addCommand : création simplifiée d'une nouvelle commande
+     *        - Les données sont transmises au format json
+     *        - Retourne un token
+     * 
+     * @param Request $rq
+     * @param Response $rs
+     * @return Response
+     * 
+     */
+    public function ajouterCommande(Request $rq, Response $rs) : Response {
+
+      $commande_data = $rq->getParsedBody();
+
+      if (!isset($commande_data['nom_client'])) {
+        return Writer::json_error($rs, 400, " information manquante : nom_client");
+      }
+
+      if (!isset($commande_data['mail_client'])) {
+        return Writer::json_error($rs, 400, " information manquante : mail_client");
+      }
+
+      if (!isset($commande_data['livraison']['date'])) {
+        return Writer::json_error($rs, 400, " information manquante : livraison(date)");
+      }
+
+      if (!isset($commande_data['livraison']['heure'])) {
+        return Writer::json_error($rs, 400, " information manquante : livraison(heure)");
+      }
+
+      try {
+
+        $c = new Commande();
+
+        $c->id = Uuid::uuid4();
+        $c->nom = filter_var($commande_data['nom_client'], FILTER_SANITIZE_STRING);
+        $c->mail = filter_var($commande_data['mail_client'], FILTER_SANITIZE_EMAIL);
+        $c->livraison = \Datetime::createFromFormat('d-m-Y H:i',
+          $commande_data['livraison']['date'] . ' ' .
+          $commande_data['livraison']['heure']);
+        $c->status = Commande::CREATED;
+
+        $c->token = bin2hex(random_bytes(32));
+        $c->montant = 0;
+
+        $c->save();
+
+        return Writer::json_output($rs, 201, ['commande'=> $c])
+          ->withHeader('Location', $this->c->router->pathFor('commande', ['id'=> $c->id]));
+
+      } catch (\Exception $e) {
+        return Writer::json_error($rs, 500, $e->getMessage());
+      }
+
+    }
   
 }

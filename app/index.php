@@ -7,14 +7,15 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
 
-$config = require_once __DIR__ . '/../src/conf/settings.php';
+$api_settings = require_once __DIR__ . '/../src/conf/api_settings.php';
+$api_errors = require_once __DIR__ . '/../src/conf/api_errors.php';
 
-$c = new \Slim\Container($config);
+$api_container = new \Slim\Container(array_merge($api_settings, $api_errors));
 
-$app = new \Slim\App($c);
+$app = new \Slim\App($api_container);
 
 /*Config et Connexion à la BDD*/
-$config = parse_ini_file($c->get('settings')['dbfile']);
+$config = parse_ini_file($api_container->get('settings')['dbfile']);
 
 $db = new Illuminate\Database\Capsule\Manager();
 
@@ -25,9 +26,15 @@ $db->bootEloquent();           /* établir la connexion */
 
 //* Les objets de type requête
 
-$app->get('/commandes[/]', CommandController::class . ':listCommands');
+$app->get('/commandes[/]', CommandController::class . ':listCommandes');
 
-$app->get('/commandes/{id}[/]', CommandController::class . ':uneCommande');
+$app->get('/commandes/{id}[/]', CommandController::class . ':uneCommande')
+    ->setName('commande');
+
+
+/* TD3 : POST */
+
+$app->post('/td3/commandes[/]', CommandController::class . ':ajouterCommande');
 
 //! Sur Internet ou Postman écrire une URL de ce genre pour lister toutes les commandes :
 //! http://localhost/TD1_ROUTES_JSON/app/commandes
