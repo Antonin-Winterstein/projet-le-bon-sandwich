@@ -1,2 +1,2 @@
 src/conf/config.ini
-*.sql
+lbs_commande_service/src/vendor/
