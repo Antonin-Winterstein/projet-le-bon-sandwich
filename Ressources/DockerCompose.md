@@ -52,6 +52,7 @@ Acces possible pour la navigation dans le catalogue :</br>
 
 10. Sur <a href="http://localhost:8080/">Acces Adminer</a> connectez-vous avec les identifiants suivants :
 #
+    Serveur : command
     MYSQL_USER=command_lbs
     MYSQL_PASSWORD=command_lbs
     MYSQL_DATABASE=command_lbs
