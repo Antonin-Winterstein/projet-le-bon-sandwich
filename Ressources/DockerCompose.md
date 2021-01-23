@@ -61,7 +61,7 @@ Acces possible pour la navigation dans le catalogue :</br>
 
 12. Repetez cette action (<b>⚠️ Il faut recliquer sur "Importer" dans le menu à gauche avant de séléctionner votre fichier</b>) en selectionnant maintennant le fichier "<b>command_lbs_data_1.sql</b>".
 
-13. Maintennant nous allons installer notre "composer.json". Pour ça, connectez-vous au container de l'API Commande avec la commande <b>docker exec -it projet-le-bon-sandwich_api.commande_1 /bin/bash</b>.
+13. Maintennant nous allons installer notre "composer.json". Juste avant, aller dans votre fichier "<b>lbs_commande_service/src/</b>" et supprimer le fichier "<b>composer.lock</b>".<br/> Ceci étant fais, connectez-vous au container de l'API Commande avec la commande <b>docker exec -it projet-le-bon-sandwich_api.commande_1 /bin/bash</b>.
 Vous devriez vous retrouver dans le dossier "/var/www/src". Vérifiez le avec un petit <b>ls</b>
 #
     root@XXXXXXXXXX:/var/www/src# ls
@@ -73,6 +73,14 @@ Patientez lors du téléchargement, un petit café ?!
 
 15. <span style="color:red;">⚠️ Vérifiez bien que votre vendor n'est pas push sur git (fichier "<b>.gitignore"</b>).</span> Normalement je l'ai ajouté mais vérifiez quand même ;).
 
-16. Installation de comopse sur l'API Catalogue ...? Je ne sais pas, dites moi sur Discord.
+16. Enfin, rendez-vous dans le "<b>lbs_commande_service/api/index.php</b>" et décommenter les lignes
+#
+    #require_once  __DIR__ . '/../src/vendor/autoload.php';
+
+    #use \Psr\Http\Message\ServerRequestInterface as Request ;
+    #use \Psr\Http\Message\ResponseInterface as Response ;
+
+
+17. Tout est prêt, reste plus qu'a savoir si on fait aussi l'installation de comopse sur l'API Catalogue ...? Je ne sais pas, dites moi sur Discord.
 
 © Antonin LIEHN
