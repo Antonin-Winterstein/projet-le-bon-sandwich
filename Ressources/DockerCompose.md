@@ -41,12 +41,13 @@ Ensuite reprennez l'installation depuis le début <span style="font-size:0.6em;"
 9. Ceci étant fait, vous pouvez désormais consulter ces urls afin de vérifier une bonne fois pour toute le bon focntionnement de votre installation.<br/>
 - <a href="https://api.commande.local:19043">API de prise de commandes</a></br>
 Acces possible pour la prise de commande :</br>
-    - http://api.commande.local:19080/</br>
-    - https://api.commande.local:19043/</br>
+    - http://api.commande.local:19080/ </br>
+    - https://api.commande.local:19043/ </br>
 
 - <a href="https://api.catalogue.local:19143">API de navigation dans le catalogue</a></br>
 Acces possible pour la navigation dans le catalogue :</br>
-    - A définir</br>
+  - http://api.catalogue.local:19180/ </br>
+  - https://api.catalogue.local:19143/ </br>
 - <a href="http://localhost:8081/">Acces Mongo Express</a></br>
 - <a href="http://localhost:8080/">Acces Adminer</a></br>
 
@@ -61,19 +62,28 @@ Acces possible pour la navigation dans le catalogue :</br>
 
 12. Repetez cette action (<b>⚠️ Il faut recliquer sur "Importer" dans le menu à gauche avant de séléctionner votre fichier</b>) en selectionnant maintennant le fichier "<b>command_lbs_data_1.sql</b>".
 
-13. Maintennant nous allons installer notre "composer.json". Juste avant, aller dans votre fichier "<b>lbs_commande_service/src/</b>" et supprimer le fichier "<b>composer.lock</b>".<br/> Ceci étant fais, connectez-vous au container de l'API Commande avec la commande <b>docker exec -it projet-le-bon-sandwich_api.commande_1 /bin/bash</b>.
+13. Pour MongoDB, connectez-vous sur http://api.catalogue.local:19180/ et créez la base "<b>Catalogue</b>". Ensuite, connectez-vous dans le container Mongo avec la commande <b>docker exec -it projet-le-bon-sandwich_mongo.cat_1 /bin/bash</b>. </br> Vérifiez que vous êtes bien dans "<b>/var/data</b>" et faites un <b>ls -l</b>
+#
+    root@XXXXXXXXX:/var/data# ls
+    categories.json  mongoimport  sandwichs.json
+
+14. Ici exécutez les commandes 
+    - <b>mongoimport -dcatalogue --collection categories --jsonArray < categories.json</b>
+    - <b>mongoimport -dcatalogue --collection sandwiches --jsonArray < sandwichs.json</b>
+  
+15. Maintennant nous allons installer notre "composer.json". Juste avant, aller dans votre fichier "<b>lbs_commande_service/src/</b>" et supprimer le fichier "<b>composer.lock</b>".<br/> Ceci étant fais, connectez-vous au container de l'API Commande avec la commande <b>docker exec -it projet-le-bon-sandwich_api.commande_1 /bin/bash</b>.
 Vous devriez vous retrouver dans le dossier "/var/www/src". Vérifiez le avec un petit <b>ls</b>
 #
     root@XXXXXXXXXX:/var/www/src# ls
     api  composer.json
 
-14. Votre "composer.json" est bien là, intaller le !</br>
+16. Votre "composer.json" est bien là, intaller le !</br>
 <b>composer install</b></br>
 Patientez lors du téléchargement, un petit café ?!
 
-15. <span style="color:red;">⚠️ Vérifiez bien que votre vendor n'est pas push sur git (fichier "<b>.gitignore"</b>).</span> Normalement je l'ai ajouté mais vérifiez quand même ;).
+17. <span style="color:red;">⚠️ Vérifiez bien que votre vendor n'est pas push sur git (fichier "<b>.gitignore"</b>).</span> Normalement je l'ai ajouté mais vérifiez quand même ;).
 
-16. Enfin, rendez-vous dans le "<b>lbs_commande_service/api/index.php</b>" et décommenter les lignes
+18. Enfin, rendez-vous dans le "<b>lbs_commande_service/api/index.php</b>" et décommenter les lignes
 #
     #require_once  __DIR__ . '/../src/vendor/autoload.php';
 
@@ -81,6 +91,7 @@ Patientez lors du téléchargement, un petit café ?!
     #use \Psr\Http\Message\ResponseInterface as Response ;
 
 
-17. Tout est prêt, reste plus qu'a savoir si on fait aussi l'installation de comopse sur l'API Catalogue ...? Je ne sais pas, dites moi sur Discord.
+19. Faire la même chose pour catalogue (depuis l'étape 15)
+
 
 © Antonin LIEHN
