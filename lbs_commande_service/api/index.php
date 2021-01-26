@@ -1,5 +1,7 @@
 <?php
 
+require_once  __DIR__ . '/../src/vendor/autoload.php';
+
 require_once __DIR__ . '/../src/vendor/autoload.php';
 
 use lbs\commande\controller\CommandController;
@@ -35,9 +37,13 @@ $app->post('/commandes[/]', CommandController::class . ':ajouterCommande');
 //! Sur Internet ou Postman écrire une URL de ce genre pour lister toutes les commandes :
 //! http://localhost/TD1_ROUTES_JSON/app/commandes
 
-//! Sur Internet ou Postman écrire une URL de ce genre pour afficher la commande avec l'ID passé en paramètre :
-//! http://localhost/TD1_ROUTES_JSON/app/commandes/45RF56TH
+#use \Psr\Http\Message\ServerRequestInterface as Request ;
+#use \Psr\Http\Message\ResponseInterface as Response ;
 
 
 //* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
-$app->run();
+try {
+    $app->run();
+} catch (Throwable $e) {
+
+}
