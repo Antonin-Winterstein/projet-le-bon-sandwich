@@ -20,20 +20,53 @@ class CommandController {
 
   }
 
-  public function listCommandes(Request $rq, Response $rs, array $args) : Response {
-    $commandes = Commande::select('id', 'mail', 'created_at', 'montant')->get();
+
+  /**
+   * 
+   * public function commands : liste toutes les commandes
+   * 
+   * @return Response : la liste des commandes au format json
+   * 
+   */
+  public function commands(Request $rq, Response $rs, array $args) : Response {
+    $commandes = Commande::select('id', 'mail', 'created_at', 'montant', 'nom')->get();
+
+    $tab_commandes = [];
+
+    foreach ($commandes as $commande) {
+
+      $tab_commandes[] = [
+        "commande"=>[
+          "id" => $commande->id,
+          "nom" => $commande->nom,
+          "date" => date('Y-m-d', strtotime($commande->created_at)),
+          "montant" => $commande->montant,
+        ],
+        "links"=>[
+          "self"=> ["/commandes/" . $commande->id]
+        ]
+        ];
+    }
 
     $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
     $rs->getBody()->write(json_encode ( [
       'type' => 'collection',
       'count' => count($commandes),
-      'commandes' => $commandes->toArray()
+      'commandes' => $tab_commandes
     ]));
 
     return $rs;
   }
 
-  public function uneCommande(Request $rq, Response $rs, array $args) : Response {
+
+  /**
+   * 
+   * public function aCommand : liste le détail de la commande en argument de l'URI
+   * 
+   * @return Response : le détail d'une commande au format json
+   * 
+   */
+  public function aCommand(Request $rq, Response $rs, array $args) : Response {
 
     $id = $args['id'];
 
@@ -65,7 +98,7 @@ class CommandController {
      * @return Response
      * 
      */
-    public function ajouterCommande(Request $rq, Response $rs) : Response {
+    public function addCommand(Request $rq, Response $rs) : Response {
 
       $commande_data = $rq->getParsedBody();
 
