@@ -20,6 +20,39 @@ class CommandController {
 
   }
 
+  /**
+   * 
+   * private function commandStatus : transforme le statut de la commande d'entier à chaine de caractère
+   * 
+   * @param int $status : le statut de la commande
+   * @return string : le statut sous forme de chaine de caractère
+   * 
+   */
+  private function commandStatus(int $status)
+  {
+    switch ($status) {
+      case 1:
+        return '1 : en cours de paiement';
+        break;
+
+      case 2:
+        return '2 : en cours de traitement';
+        break;
+
+      case 3:
+        return '3 : en cours de livraison';
+        break;
+
+      case 4:
+        return '4 : livrée';
+        break;
+      
+      default:
+        return 'Erreur : statut inconnu';
+        break;
+    }
+  }
+
 
   /**
    * 
@@ -29,8 +62,9 @@ class CommandController {
    * 
    */
   public function commands(Request $rq, Response $rs, array $args) : Response {
-    $commandes = Commande::select('id', 'mail', 'created_at', 'montant', 'nom')->get();
+    $commandes = Commande::select('id', 'mail', 'livraison', 'montant', 'nom', 'status')->get();
 
+    //* Mise en forme de toutes les commandes en tableau
     $tab_commandes = [];
 
     foreach ($commandes as $commande) {
@@ -39,21 +73,25 @@ class CommandController {
         "commande"=>[
           "id" => $commande->id,
           "nom" => $commande->nom,
-          "date" => date('Y-m-d', strtotime($commande->created_at)),
+          "date_livraison" => date('Y-m-d', strtotime($commande->livraison)),
+          "statut" => $this->commandStatus($commande->status),
           "montant" => $commande->montant,
         ],
         "links"=>[
           "self"=> ["/commandes/" . $commande->id]
-        ]
-        ];
+      ]];
     }
 
-    $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-    $rs->getBody()->write(json_encode ( [
+    //* Mise en forme de la collection de commande
+    $data = [
       'type' => 'collection',
       'count' => count($commandes),
       'commandes' => $tab_commandes
-    ]));
+    ];
+
+
+    $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+    $rs->getBody()->write(json_encode ($data));
 
     return $rs;
   }
@@ -72,10 +110,38 @@ class CommandController {
 
     try {
       $commande = Commande::select(['id', 'livraison', 'nom', 'mail', 'status', 'montant'])->with('items')->where('id', '=', $id)->firstOrFail();
+      
+      //* Mise en forme de tous les sandwichs avec lien en tableau
+      $tab_items = [];
 
+      foreach ($commande->items as $sandwich) {
+        $tab_items[] = [
+          "sandwich"=>[
+            "nom" => $sandwich->libelle,
+            "quantite" => $sandwich->quantite,
+            "tarif" => $sandwich->tarif,
+          ],
+          "links"=>[
+            "self"=> [$sandwich->uri]
+          ]
+          ];
+      }
+      
+      //* Mise en forme de tous les sandwichs avec lien en tableau
+      $tab_commande = [
+        "id" => $commande->id,
+        "nom" => $commande->nom,
+        "mail" => $commande->mail,
+        "statut" => $this->commandStatus($commande->status),
+        "date_livraison" => date('Y-m-d', strtotime($commande->livraison)),
+        "montant" => $commande->montant,
+        "sandwichs" => $tab_items,
+      ];
+
+      //* Mise en forme de la ressource
       $data = [
         'type' => 'resource',
-        'commande' => $commande->toArray()
+        'commande' => $tab_commande,
       ];
 
       return Writer::json_output($rs, 200, $data);
