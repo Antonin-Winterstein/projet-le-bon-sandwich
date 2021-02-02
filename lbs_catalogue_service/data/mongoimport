@@ -8,4 +8,4 @@
  ## les sandwichs
  ##
 
- mongoimport -dcatalogue --collection sandwiches --jsonArray < sandwichs.json
+ mongoimport -dcatalogue --collection sandwiches --jsonArray < sandwichs.2.json
