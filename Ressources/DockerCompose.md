@@ -81,8 +81,8 @@ Ensuite reprennez l'installation depuis le début <span style="font-size:0.6em;"
 
 14. Ici exécutez les commandes
 
-    - <b>mongoimport -d Catalogue --collection categories --jsonArray < categories.json</b>
-    - <b>mongoimport -d Catalogue --collection sandwiches --jsonArray < sandwichs.json</b>
+    - <b>mongoimport -d catalogue --collection categories --jsonArray < categories.json</b>
+    - <b>mongoimport -d catalogue --collection sandwiches --jsonArray < sandwichs.2.json</b>
 
 15. Maintenant nous allons installer notre "composer.json". Juste avant, aller dans votre fichier "<b>lbs_commande_service/src/</b>" et supprimer le fichier "<b>composer.lock</b>".<br/> Ceci étant fais, connectez-vous au container de l'API Commande avec la commande <b>docker exec -it projet-le-bon-sandwich_api.commande_1 /bin/bash</b>.
     Vous devriez vous retrouver dans le dossier "/var/www/src". Vérifiez le avec un petit <b>ls</b>
