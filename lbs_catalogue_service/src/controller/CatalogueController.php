@@ -35,7 +35,7 @@ class CatalogueController {
                         "prix" => $sandwich->prix,
                     ],
                     "links"=>[
-                    "self"=> ["/sandwichs/" . $sandwich->_id]
+                    "self"=> [$this->c->router->pathFor('sandwich', ['ref'=> $sandwich->ref])]
                 ]];
                 $count++;
             }
@@ -59,14 +59,39 @@ class CatalogueController {
     }
 
     public function aSandwich(Request $rq, Response $rs, array $args) : Response {
-        $id = $args['id'];
+        
+        $ref = $args['ref'];
 
         try{
             $db = MongoConnection::getCatalogue();
-            $db->sandwiches->find([ ], []);
+            $sandwich = $db->sandwiches->findOne( ["ref" => $ref], ["projection" => ["_id" => 0]] );
+
+
+            //* Mise en forme de tous les attributs de la ressource
+            $tab_sandwich = [
+                "ref" => $sandwich->ref,
+                "nom" => $sandwich->nom,
+                "description" => $sandwich->description,
+                "type_pain" => $sandwich->type_pain,
+                "prix" => $sandwich->prix,
+                "image" => $sandwich->image,
+                "categories" => $sandwich->categories,
+            ];
+
+            //* Mise en forme de la ressource
+            $data = [
+                'type' => 'resource',
+                'sandwich' => $tab_sandwich,
+            ];
+
+            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode($data));
+            
+            return $rs;
+
 
         }catch(ModelNotFoundException $e){
-            return Writer::json_error($rs, 404, "sandwich $id not found");
+            return Writer::json_error($rs, 404, "sandwich $ref not found");
         }
     }
 }

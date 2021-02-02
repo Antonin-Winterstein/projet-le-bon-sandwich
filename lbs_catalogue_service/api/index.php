@@ -24,7 +24,8 @@ MongoConnection::createConnexion();
 
 $app->get('/sandwichs[/]', CatalogueController::class . ':sandwichs');
 
-$app->get('/sandwichs/{id}[/]', CatalogueController::class . ':aSandwich');
+$app->get('/sandwichs/{ref}[/]', CatalogueController::class . ':aSandwich')
+    ->setName('sandwich');
 
 $app->run();
 

@@ -151,7 +151,7 @@ class CommandController {
           ];
       }
       
-      //* Mise en forme de tous les sandwichs avec lien en tableau
+      //* Mise en forme de tous les attributs de la ressource
       $tab_commande = [
         "id" => $commande->id,
         "nom" => $commande->nom,
