@@ -31,6 +31,8 @@ class CatalogueController {
                     "sandwich" => [ 
                         "ref" => $sandwich->ref,
                         "nom" => $sandwich->nom,
+                        "type_pain" => $sandwich->type_pain,
+                        "prix" => $sandwich->prix,
                     ],
                     "links"=>[
                     "self"=> ["/sandwichs/" . $sandwich->_id]
@@ -42,7 +44,8 @@ class CatalogueController {
             $data = [
                 'type' => 'collection',
                 'count' => $count,
-                'commandes' => $tab_sandwichs
+                'date' => date('d-m-Y'),
+                'sandwichs' => $tab_sandwichs,
             ];
     
             $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
