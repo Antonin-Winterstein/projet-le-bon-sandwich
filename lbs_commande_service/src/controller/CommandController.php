@@ -25,26 +25,50 @@ class CommandController {
    * private function commandStatus : transforme le statut de la commande d'entier à chaine de caractère
    * 
    * @param int $status : le statut de la commande
-   * @return string : le statut sous forme de chaine de caractère
+   * @return string : le statut sous d'un tableau :
+   * 
+   * [
+   * 'int' => numéro de statut,
+   * 'str' => statut sous forme de string
+   * ] 
    * 
    */
   private function commandStatus(int $status)
   {
     switch ($status) {
       case 1:
-        return '1 : en cours de paiement';
+        return [
+          'int' => 1,
+          'str' => 'commande créée'
+        ];
         break;
 
       case 2:
-        return '2 : en cours de traitement';
+        return  [
+          'int' => 2,
+          'str' => 'commande payée'
+        ];
         break;
 
       case 3:
-        return '3 : en cours de livraison';
+        return  [
+          'int' => 3,
+          'str' => 'commande en cours de préparation'
+        ];
         break;
 
       case 4:
-        return '4 : livrée';
+        return  [
+          'int' => 4,
+          'str' => 'commande prête'
+        ];
+        break;
+
+      case 5:
+        return  [
+          'int' => 5,
+          'str' => '5 : commande terminée'
+        ];
         break;
       
       default:

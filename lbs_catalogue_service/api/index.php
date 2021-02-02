@@ -2,31 +2,39 @@
 
 require_once  __DIR__ . '/../src/vendor/autoload.php';
 
-/*use \Psr\Http\Message\ServerRequestInterface as Request ;
-use \Psr\Http\Message\ResponseInterface as Response ;
+use lbs\catalogue\conf\MongoConnection;
+use lbs\catalogue\controller\CatalogueController;
 
-$app = new \Slim\App();
+$api_settings = require_once __DIR__ . '/../src/conf/api_settings.php';
+$api_errors = require_once __DIR__ . '/../src/conf/api_errors.php';
 
-$app->get('/test[/]', function(Request $rq, Response $rs) : Response{
-   $rs->getBody()->write("hello word : service catalague");
-   return $rs;
-});
+$api_container = new \Slim\Container(array_merge($api_settings, $api_errors));
 
-$app->run();*/
+$app = new \Slim\App($api_container);
 
-//Connexion avec MongoDb
-$connection = new \MongoDB\Client("mongodb://dbcat/");
 
-$db = $connection->cataogue;
-//Recherche des sandwiches
-$sandwichs = $db->sandwiches->find([ ], []);
-var_dump($sandwichs);
-//Si il n'y à pas de résultat
-if(is_null($sandwichs)){
-    print"Pas de sndwiche dans notre catalgue";
-    die();
-}
-//Liste des sanfwiches
-foreach ($sandwichs as $sdchs){
-    print $sdchs->nom.' '.$sdchs->type_pain.'</br>';
-}
+//*Connexion avec MongoDb
+// $connection = new \MongoDB\Client("mongodb://dbcat/");
+
+// $db = $connection->catalogue;
+
+MongoConnection::createConnexion();
+
+//* Les objets de type requête
+
+$app->get('/catalogue[/]', CatalogueController::class . ':catalogue');
+
+$app->run();
+
+// //Recherche des sandwiches
+// $sandwichs = $db->sandwiches->find([ ], []);
+// var_dump($sandwichs);
+// //Si il n'y à pas de résultat
+// if(is_null($sandwichs)){
+//     print"Pas de sndwiche dans notre catalgue";
+//     die();
+// }
+// //Liste des sandwiches
+// foreach ($sandwichs as $sdchs){
+//     print $sdchs->nom.' '.$sdchs->type_pain.'</br>';
+// }

@@ -2,8 +2,6 @@
 
 require_once  __DIR__ . '/../src/vendor/autoload.php';
 
-require_once __DIR__ . '/../src/vendor/autoload.php';
-
 use lbs\commande\controller\CommandController;
 
 $api_settings = require_once __DIR__ . '/../src/conf/api_settings.php';
