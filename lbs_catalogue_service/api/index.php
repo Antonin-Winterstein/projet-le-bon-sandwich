@@ -22,7 +22,9 @@ MongoConnection::createConnexion();
 
 //* Les objets de type requête
 
-$app->get('/catalogue[/]', CatalogueController::class . ':catalogue');
+$app->get('/sandwichs[/]', CatalogueController::class . ':sandwichs');
+
+$app->get('/sandwichs/{id}[/]', CatalogueController::class . ':aSandwich');
 
 $app->run();
 

@@ -17,7 +17,7 @@ class CatalogueController {
     }
 
     
-    public function catalogue(Request $rq, Response $rs, array $args) : Response {
+    public function sandwichs(Request $rq, Response $rs, array $args) : Response {
         try{
             $db = MongoConnection::getCatalogue();
     
@@ -52,6 +52,18 @@ class CatalogueController {
 
         }catch(ModelNotFoundException $e){
             return Writer::json_error($rs, 404, "catalogue not found");
+        }
+    }
+
+    public function aSandwich(Request $rq, Response $rs, array $args) : Response {
+        $id = $args['id'];
+
+        try{
+            $db = MongoConnection::getCatalogue();
+            $db->sandwiches->find([ ], []);
+
+        }catch(ModelNotFoundException $e){
+            return Writer::json_error($rs, 404, "sandwich $id not found");
         }
     }
 }
