@@ -22,22 +22,10 @@ MongoConnection::createConnexion();
 
 //* Les objets de type requête
 
-$app->get('/sandwichs[/]', CatalogueController::class . ':sandwichs');
+$app->get('/sandwichs[/]', CatalogueController::class . ':sandwichs')
+    ->setName('sandwichs');
 
 $app->get('/sandwichs/{ref}[/]', CatalogueController::class . ':aSandwich')
     ->setName('sandwich');
 
 $app->run();
-
-// //Recherche des sandwiches
-// $sandwichs = $db->sandwiches->find([ ], []);
-// var_dump($sandwichs);
-// //Si il n'y à pas de résultat
-// if(is_null($sandwichs)){
-//     print"Pas de sndwiche dans notre catalgue";
-//     die();
-// }
-// //Liste des sandwiches
-// foreach ($sandwichs as $sdchs){
-//     print $sdchs->nom.' '.$sdchs->type_pain.'</br>';
-// }
