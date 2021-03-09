@@ -4,7 +4,7 @@ namespace lbs\catalogue\errors;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use lbs\commande\utils\Writer;
+use lbs\catalogue\utils\Writer;
 use Slim\Container as C;
 
 class Internal {

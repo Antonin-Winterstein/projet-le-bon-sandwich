@@ -4,7 +4,7 @@ namespace lbs\catalogue\errors;
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use lbs\commande\utils\Writer;
+use lbs\catalogue\utils\Writer;
 use Slim\Container as C;
 
 class BadUri {
@@ -12,5 +12,6 @@ class BadUri {
     $uri = $rq->getUri();
     // ($c->get('logger.error'))->error("the request $uri was not recognized : malformed uri", [400]);
     return Writer::json_error($rs, 400, "the request $uri was not recognized : malformed uri");
+
   }
 }
