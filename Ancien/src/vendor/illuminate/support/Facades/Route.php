@@ -23,7 +23,7 @@ namespace Illuminate\Support\Facades;
  * @method static \Illuminate\Routing\Route view(string $uri, string $view, array $data = [], int $status = 200, array $headers = [])
  * @method static \Illuminate\Routing\RouteRegistrar as(string $value)
  * @method static \Illuminate\Routing\RouteRegistrar domain(string $value)
- * @method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware)
+ * @method static \Illuminate\Routing\RouteRegistrar middlewares(array|string|null $middlewares)
  * @method static \Illuminate\Routing\RouteRegistrar name(string $value)
  * @method static \Illuminate\Routing\RouteRegistrar namespace(string|null $value)
  * @method static \Illuminate\Routing\RouteRegistrar prefix(string  $prefix)

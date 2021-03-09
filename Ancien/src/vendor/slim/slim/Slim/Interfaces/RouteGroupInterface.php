@@ -19,7 +19,7 @@ interface RouteGroupInterface
     public function getPattern();
 
     /**
-     * Prepend middleware to the group middleware collection
+     * Prepend middlewares to the group middlewares collection
      *
      * @param callable|string $callable The callback routine
      *

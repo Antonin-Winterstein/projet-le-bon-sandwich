@@ -15,14 +15,14 @@ use UnexpectedValueException;
 /**
  * Middleware
  *
- * This is an internal class that enables concentric middleware layers. This
+ * This is an internal class that enables concentric middlewares layers. This
  * class is an implementation detail and is used only inside of the Slim
  * application; it is not visible to—and should not be used by—end users.
  */
 trait MiddlewareAwareTrait
 {
     /**
-     * Tip of the middleware call stack
+     * Tip of the middlewares call stack
      *
      * @var callable
      */
@@ -36,19 +36,19 @@ trait MiddlewareAwareTrait
     protected $middlewareLock = false;
 
     /**
-     * Add middleware
+     * Add middlewares
      *
-     * This method prepends new middleware to the application middleware stack.
+     * This method prepends new middlewares to the application middlewares stack.
      *
      * @param callable $callable Any callable that accepts three arguments:
      * 1. A Request object
      * 2. A Response object
-     * 3. A "next" middleware callable
+     * 3. A "next" middlewares callable
      *
      * @return static
      *
-     * @throws RuntimeException         If middleware is added while the stack is dequeuing
-     * @throws UnexpectedValueException If the middleware doesn't return a Psr\Http\Message\ResponseInterface
+     * @throws RuntimeException         If middlewares is added while the stack is dequeuing
+     * @throws UnexpectedValueException If the middlewares doesn't return a Psr\Http\Message\ResponseInterface
      */
     protected function addMiddleware(callable $callable)
     {
@@ -81,9 +81,9 @@ trait MiddlewareAwareTrait
     }
 
     /**
-     * Seed middleware stack with first callable
+     * Seed middlewares stack with first callable
      *
-     * @param callable $kernel The last item to run as middleware
+     * @param callable $kernel The last item to run as middlewares
      *
      * @throws RuntimeException if the stack is seeded more than once
      */
@@ -99,7 +99,7 @@ trait MiddlewareAwareTrait
     }
 
     /**
-     * Call middleware stack
+     * Call middlewares stack
      *
      * @param  ServerRequestInterface $request A request object
      * @param  ResponseInterface      $response A response object

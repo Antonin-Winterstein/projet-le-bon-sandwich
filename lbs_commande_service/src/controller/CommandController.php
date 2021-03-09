@@ -5,10 +5,10 @@ namespace lbs\commande\controller;
 use Slim\Router;
 use lbs\commande\utils\Writer;
 use lbs\commande\models\Commande;
-use Ramsey\Uuid\Uuid;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Ramsey\Uuid\Uuid;
 
 class CommandController {
 
@@ -86,7 +86,7 @@ class CommandController {
    * 
    */
   public function commands(Request $rq, Response $rs, array $args) : Response {
-    $commandes = Commande::select('id', 'mail', 'livraison', 'montant', 'nom', 'status')->get();
+    $commandes = Commande::select('id', 'mail', 'livraison', 'montant', 'nom', 'status', 'token')->get();
 
     //* Mise en forme de toutes les commandes en tableau
     $tab_commandes = [];
@@ -95,6 +95,7 @@ class CommandController {
 
       $tab_commandes[] = [
         "commande"=>[
+          "token" => $commande->token,
           "id" => $commande->id,
           "nom" => $commande->nom,
           "date_livraison" => date('Y-m-d', strtotime($commande->livraison)),
@@ -102,7 +103,7 @@ class CommandController {
           "montant" => $commande->montant,
         ],
         "links"=>[
-          "self"=> ["/commandes/" . $commande->id]
+          "self"=> "/commandes/" . $commande->id . "?token=" . $commande->token . "/"
       ]];
     }
 
@@ -131,13 +132,14 @@ class CommandController {
   public function aCommand(Request $rq, Response $rs, array $args) : Response {
 
     $id = $args['id'];
-
+    $token = $rq->getQueryParam('token', null);
     try {
-      $commande = Commande::select(['id', 'livraison', 'nom', 'mail', 'status', 'montant'])->with('items')->where('id', '=', $id)->firstOrFail();
+      $commande = Commande::select(['id', 'livraison', 'nom', 'mail', 'status', 'montant', 'token'])->with('items')->where('id', '=', $id)->where('token', '=', $token)->firstOrFail();
       
       //* Mise en forme de tous les sandwichs avec lien en tableau
       $tab_items = [];
 
+      //* Mise en forme de tous les sandwiches
       foreach ($commande->items as $sandwich) {
         $tab_items[] = [
           "sandwich"=>[
@@ -146,21 +148,27 @@ class CommandController {
             "tarif" => $sandwich->tarif,
           ],
           "links"=>[
-            "self"=> [$sandwich->uri]
+            "self"=> $sandwich->uri
           ]
-          ];
+        ];
       }
       
       //* Mise en forme de tous les attributs de la ressource
-      $tab_commande = [
-        "id" => $commande->id,
-        "nom" => $commande->nom,
-        "mail" => $commande->mail,
-        "statut" => $this->commandStatus($commande->status),
-        "date_livraison" => date('Y-m-d', strtotime($commande->livraison)),
-        "montant" => $commande->montant,
-        "sandwichs" => $tab_items,
-      ];
+      $tab_commande[] = [
+          "links"=>[
+              "self"=> "/commandes/" . $commande->id . "?token=" . $commande->token . "/",
+              "items"=> "/commandes/" .$commande->id . "/items"
+          ],
+          "commande"=>[
+            "token" => $commande->token,
+            "id" => $commande->id,
+            "nom" => $commande->nom,
+            "mail" => $commande->mail,
+            "statut" => $this->commandStatus($commande->status),
+            "date_livraison" => date('Y-m-d', strtotime($commande->livraison)),
+            "montant" => $commande->montant,
+            "sandwichs" => $tab_items,
+          ]];
 
       //* Mise en forme de la ressource
       $data = [

@@ -15,7 +15,7 @@ $api_container = new \Slim\Container(array_merge($api_settings, $api_errors));
 $app = new \Slim\App($api_container);
 
 /*Config et Connexion à la BDD*/
-$config = parse_ini_file($api_container->get('settings')['dbfile']);
+$config = e_ini_file($api_container->get('settings')['dbfile']);
 
 $db = new Illuminate\Database\Capsule\Manager();
 

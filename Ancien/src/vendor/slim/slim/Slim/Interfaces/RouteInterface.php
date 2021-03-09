@@ -86,9 +86,9 @@ interface RouteInterface
     public function setName($name);
 
     /**
-     * Add middleware
+     * Add middlewares
      *
-     * This method prepends new middleware to the route's middleware stack.
+     * This method prepends new middlewares to the route's middlewares stack.
      *
      * @param callable|string $callable The callback routine
      *
@@ -107,7 +107,7 @@ interface RouteInterface
     /**
      * Run route
      *
-     * This method traverses the middleware stack, including the route's callable
+     * This method traverses the middlewares stack, including the route's callable
      * and captures the resultant HTTP response object. It then sends the response
      * back to the Application.
      *
@@ -121,8 +121,8 @@ interface RouteInterface
     /**
      * Dispatch route callable against current Request and Response objects
      *
-     * This method invokes the route object's callable. If middleware is
-     * registered for the route, each callable middleware is invoked in
+     * This method invokes the route object's callable. If middlewares is
+     * registered for the route, each callable middlewares is invoked in
      * the order specified.
      *
      * @param ServerRequestInterface $request  The current Request object

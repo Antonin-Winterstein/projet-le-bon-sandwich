@@ -26,6 +26,6 @@ class Commande extends Model {
   }
 
   // public function client() {
-  //   return $this->belongsTo('lbs\commande\models\Client', 'client_id');
+  //     return $this->belongsTo('lbs\commande\models\Client', 'client_id');
   // }
 }

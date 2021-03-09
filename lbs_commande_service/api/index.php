@@ -3,6 +3,7 @@
 require_once  __DIR__ . '/../src/vendor/autoload.php';
 
 use lbs\commande\controller\CommandController;
+use lbs\commande\middlewares\Token;
 
 $api_settings = require_once __DIR__ . '/../src/conf/api_settings.php';
 $api_errors = require_once __DIR__ . '/../src/conf/api_errors.php';
@@ -17,7 +18,7 @@ $config = parse_ini_file($api_container->get('settings')['dbfile']);
 
 $db = new Illuminate\Database\Capsule\Manager();
 
-/* une instance de connexion  */
+/* une instance de connexion */
 $db->addConnection($config); /* configuration avec nos paramètres */
 $db->setAsGlobal();          /* rendre la connexion visible dans tout le projet */
 $db->bootEloquent();         /* établir la connexion */
@@ -28,6 +29,7 @@ $db->bootEloquent();         /* établir la connexion */
 $app->get('/commandes[/]', CommandController::class . ':commands');
 
 $app->get('/commandes/{id}[/]', CommandController::class . ':aCommand')
+    ->add(Token::class . ':checkToken')
     ->setName('commande');
 
 $app->post('/commandes[/]', CommandController::class . ':addCommand');

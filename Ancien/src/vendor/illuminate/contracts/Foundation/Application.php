@@ -200,7 +200,7 @@ interface Application extends Container
     public function setLocale($locale);
 
     /**
-     * Determine if middleware has been disabled for the application.
+     * Determine if middlewares has been disabled for the application.
      *
      * @return bool
      */

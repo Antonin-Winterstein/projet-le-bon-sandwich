@@ -110,3 +110,15 @@ Ensuite reprennez l'installation depuis le début <span style="font-size:0.6em;"
 19. Faire la même chose pour catalogue (depuis l'étape 15)
 
 © Antonin LIEHN
+
+<!-- 
+
+Toutes les commandes :
+https://api.commande.local:19043/commandes
+
+Tous les sandwiches :
+https://api.catalogue.local:19143/sandwichs
+Un sandwiche : 
+https://api.catalogue.local:19143/sandwichs/(ref)
+
+ -->

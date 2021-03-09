@@ -77,9 +77,9 @@ class App
     }
 
     /**
-     * Add middleware
+     * Add middlewares
      *
-     * This method prepends new middleware to the app's middleware stack.
+     * This method prepends new middlewares to the app's middlewares stack.
      *
      * @param  callable|string $callable The callback routine
      *
@@ -278,7 +278,7 @@ class App
     /**
      * Run application
      *
-     * This method traverses the application middleware stack and then sends the
+     * This method traverses the application middlewares stack and then sends the
      * resultant Response object to the HTTP client.
      *
      * @param bool|false $silent
@@ -362,7 +362,7 @@ class App
     /**
      * Process a request
      *
-     * This method traverses the application middleware stack and then returns the
+     * This method traverses the application middlewares stack and then returns the
      * resultant Response object.
      *
      * @param ServerRequestInterface $request
@@ -387,7 +387,7 @@ class App
             $request = $this->dispatchRouterAndPrepareRoute($request, $router);
         }
 
-        // Traverse middleware stack
+        // Traverse middlewares stack
         try {
             $response = $this->callMiddlewareStack($request, $response);
         } catch (Exception $e) {
@@ -471,7 +471,7 @@ class App
     /**
      * Invoke application
      *
-     * This method implements the middleware interface. It receives
+     * This method implements the middlewares interface. It receives
      * Request and Response objects, and it returns a Response object
      * after compiling the routes registered in the Router and dispatching
      * the Request object to the appropriate Route callback routine.
@@ -586,7 +586,7 @@ class App
             $route = $router->lookupRoute($routeInfo[1]);
             $route->prepare($request, $routeArguments);
 
-            // add route to the request's attributes in case a middleware or handler needs access to the route
+            // add route to the request's attributes in case a middlewares or handler needs access to the route
             $request = $request->withAttribute('route', $route);
         }
 

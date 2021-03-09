@@ -264,7 +264,7 @@ class Route extends Routable implements RouteInterface
         // Finalise route now that we are about to run it
         $this->finalize();
 
-        // Traverse middleware stack and fetch updated response
+        // Traverse middlewares stack and fetch updated response
         return $this->callMiddlewareStack($request, $response);
     }
 

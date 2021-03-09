@@ -28,7 +28,7 @@ abstract class Routable
     protected $container;
 
     /**
-     * Route middleware
+     * Route middlewares
      *
      * @var callable[]
      */
@@ -52,7 +52,7 @@ abstract class Routable
     }
 
     /**
-     * Get the middleware registered for the group
+     * Get the middlewares registered for the group
      *
      * @return callable[]
      */
@@ -85,7 +85,7 @@ abstract class Routable
     }
 
     /**
-     * Prepend middleware to the middleware collection
+     * Prepend middlewares to the middlewares collection
      *
      * @param callable|string $callable The callback routine
      *
