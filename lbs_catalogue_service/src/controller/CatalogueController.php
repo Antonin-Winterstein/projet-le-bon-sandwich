@@ -19,6 +19,7 @@ class CatalogueController {
     
     public function sandwichs(Request $rq, Response $rs, array $args) : Response {
         try{
+            $db = MongoConnection::getCatalogue();
 
             //* Pagination, ordre par attributs et tri par type de pain
             $sortFilter = $rq->getQueryParam('sort', null);
@@ -29,7 +30,6 @@ class CatalogueController {
             if($page <= 0) $page = 1;
             if($size <= 0) $size = 15;
 
-            $db = MongoConnection::getCatalogue();
             if(is_null($type)) $condition = [];
             else $condition = ['type_pain' => $type] ;
 

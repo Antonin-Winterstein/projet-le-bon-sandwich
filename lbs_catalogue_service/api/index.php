@@ -4,6 +4,7 @@ require_once  __DIR__ . '/../src/vendor/autoload.php';
 
 use lbs\catalogue\conf\MongoConnection;
 use lbs\catalogue\controller\CatalogueController;
+use lbs\catalogue\controller\CategoriesController;
 
 $api_settings = require_once __DIR__ . '/../src/conf/api_settings.php';
 $api_errors = require_once __DIR__ . '/../src/conf/api_errors.php';
@@ -27,5 +28,11 @@ $app->get('/sandwichs[/]', CatalogueController::class . ':sandwichs')
 
 $app->get('/sandwichs/{ref}[/]', CatalogueController::class . ':aSandwich')
     ->setName('sandwich');
+
+$app->get('/categories[/]', CategoriesController::class . ':categories')
+    ->setName('categories');
+
+$app->get('/categories/{id}[/]', CategoriesController::class . ':aCategory')
+    ->setName('category');
 
 $app->run();
