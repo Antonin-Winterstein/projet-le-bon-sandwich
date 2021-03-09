@@ -34,5 +34,12 @@ $app->get('/categories[/]', CategoriesController::class . ':categories')
 
 $app->get('/categories/{id}[/]', CategoriesController::class . ':aCategory')
     ->setName('category');
+    
+$app->get('/sandwichs/{ref}/categories[/]', CatalogueController::class . ':aSandwichCategories')
+    ->setName('sandwichCategories');
+    
+$app->get('/categories/{id}/sandwichs[/]', CategoriesController::class . ':aCategorySandwichs')
+    ->setName('categorySandwichs');
+
 
 $app->run();

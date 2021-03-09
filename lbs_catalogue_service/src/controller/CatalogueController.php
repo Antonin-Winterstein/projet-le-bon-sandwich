@@ -99,7 +99,15 @@ class CatalogueController {
         try{
             $db = MongoConnection::getCatalogue();
             $sandwich = $db->sandwiches->findOne( ["ref" => $ref], ["projection" => ["_id" => 0]] );
-
+            $categories = $db->categories->find( ["nom" => ['$in' => $sandwich->categories]], ["projection" => ["_id" => 0]] );
+            
+            $tab_categories = [];
+            foreach ($categories as $c) {
+                $tab_categories[] = [
+                    'id' => $c->id,
+                    'nom' => $c->nom,
+                ];
+            }
 
             //* Mise en forme de tous les attributs de la ressource
             $tab_sandwich = [
@@ -108,14 +116,62 @@ class CatalogueController {
                 "description" => $sandwich->description,
                 "type_pain" => $sandwich->type_pain,
                 "prix" => $sandwich->prix,
-                "image" => $sandwich->image,
-                "categories" => $sandwich->categories,
+                "categories" => $tab_categories,
             ];
+            
 
             //* Mise en forme de la ressource
             $data = [
                 'type' => 'resource',
+                'date' => date('d-m-Y'),
+                "links"=>[
+                    "self"=> ['href' => $this->c->router->pathFor('sandwich', ['ref'=> $sandwich->ref])],
+                    "categories"=> ['href' => $this->c->router->pathFor('sandwichCategories', ['ref'=> $sandwich->ref])],
+                ],
                 'sandwich' => $tab_sandwich,
+            ];
+
+            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+            $rs->getBody()->write(json_encode($data));
+            
+            return $rs;
+
+
+        }catch(ModelNotFoundException $e){
+            return Writer::json_error($rs, 404, "sandwich $ref not found");
+        }
+    }
+
+    public function aSandwichCategories(Request $rq, Response $rs, array $args) : Response {
+
+        $ref = $args['ref'];
+
+        try{
+            $db = MongoConnection::getCatalogue();
+            $sandwich = $db->sandwiches->findOne( ["ref" => $ref], ["projection" => ["_id" => 0]] );
+            $categories = $db->categories->find( ["nom" => ['$in' => $sandwich->categories]], ["projection" => ["_id" => 0]] );
+            
+            $tab_categories = [];
+            foreach ($categories as $c) {
+                $tab_categories[] = [
+                    'id' => $c->id,
+                    'nom' => $c->nom,
+                    'description' => $c->description,
+                    "links"=>[
+                        "self"=> ['href' => $this->c->router->pathFor('category', ['id'=> $c->id])],
+                    ],
+                ];
+            }          
+
+            //* Mise en forme de la ressource
+            $data = [
+                'type' => 'collection',
+                'count' => count($tab_categories),
+                'date' => date('d-m-Y'),
+                "links"=>[
+                    "self"=> ['href' => $this->c->router->pathFor('sandwichCategories', ['ref'=> $sandwich->ref])],
+                ],
+                'categories' => $tab_categories,
             ];
 
             $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
