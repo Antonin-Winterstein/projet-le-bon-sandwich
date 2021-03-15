@@ -51,15 +51,16 @@ Ensuite reprennez l'installation depuis le début <span style="font-size:0.6em;"
 
 - <a href="https://api.commande.local:19043">API de prise de commandes</a></br>
   Acces possible pour la prise de commande :</br>
-    - http://api.commande.local:19080/ </br> 
-    - https://api.commande.local:19043/ </br>
+
+  - http://api.commande.local:19080/ </br>
+  - https://api.commande.local:19043/ </br>
 
 - <a href="https://api.catalogue.local:19143">API de navigation dans le catalogue</a></br>
   Acces possible pour la navigation dans le catalogue :</br>
-    - http://api.catalogue.local:19180/ </br>
-    - https://api.catalogue.local:19143/ </br>
-- <a href="https://api.fidelisation.local:19143">API de navigation dans les fidelisations</a></br>
-    Acces possible pour la navigation dans les fidelisations :</br>
+  - http://api.catalogue.local:19180/ </br>
+  - https://api.catalogue.local:19143/ </br>
+- <a href="https://api.fidelisation.local:19243">API de navigation dans les fidelisations</a></br>
+  Acces possible pour la navigation dans les fidelisations :</br>
   - http://api.fidelisation.local:19280/ </br>
   - https://api.fidelisation.local:19243/ </br>
 - <a href="http://localhost:8081/">Acces Mongo Express</a></br>
@@ -117,14 +118,14 @@ Ensuite reprennez l'installation depuis le début <span style="font-size:0.6em;"
 
 © Antonin LIEHN
 
-<!-- 
+<!--
 
 Toutes les commandes :
 https://api.commande.local:19043/commandes
 
 Tous les sandwiches :
 https://api.catalogue.local:19143/sandwichs
-Un sandwiche : 
+Un sandwiche :
 https://api.catalogue.local:19143/sandwichs/(ref)
 
  -->
