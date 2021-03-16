@@ -22,12 +22,17 @@ $db->setAsGlobal();          /* rendre la connexion visible dans tout le projet 
 $db->bootEloquent();         /* établir la connexion */
 
 //* Les objets de type requête
-$app->get('/login[/]', FidelisationController::class . ':login');
+$app->get('cartes/{id}/auth[/]', FidelisationController::class . ':login');
 
-$app->post('/cartes[/]', FidelisationController::class . ':cartes');
+//* Liste de toutes les cartes
+$app->get('/cartes[/]', FidelisationController::class . ':cartes');
 
-$app->post('/carte[/]{id}', FidelisationController::class . ':aCarte')
-    ->setName('Carte');
+//* Liste d'un seule carte
+$app->get('/cartes/{id}[/]', FidelisationController::class . ':aCarte')
+    ->setName('carte');
+
+//*Liste des commandes d'une carte
+$app->get('/cartes/{id}/commandes[/]', FidelisationController::class . ':comCarte');
 
 //* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
 try {

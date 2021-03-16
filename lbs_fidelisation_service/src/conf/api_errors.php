@@ -1,6 +1,7 @@
 <?php
 
 use lbs\fidelisation\errors\BadUri;
+use lbs\fidelisation\errors\NotAllowed;
 
 return [
   'notFoundHandler'=> function($c) {
@@ -11,7 +12,7 @@ return [
 
   'notAllowedHandler' => function($c) {
     return function ($rq, $rs, $methods) use ($c) {
-      return errors\NotAllowed::error($c, $rq, $rs, $methods);
+      return NotAllowed::error($c, $rq, $rs, $methods);
     };
   },
 

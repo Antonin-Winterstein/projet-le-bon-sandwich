@@ -3,7 +3,9 @@
 namespace lbs\fidelisation\controller;
 
 use lbs\fidelisation\models\Carte;
+use lbs\fidelisation\models\Commande;
 use \Psr\Http\Message\ResponseInterface as Response;
+use \Psr\Http\Message\ServerRequestInterface as Request;
 
 class FidelisationController {
 
@@ -14,24 +16,70 @@ class FidelisationController {
     $this->c = $c;
 
   }
-  
+
   /**
-   * 
-   * public function fidelisation : ...
-   * 
+   *
+   * public function login : ...
+   *
    * @return Response : login
-   * 
+   *
    */
   public function login(Request $rq, Response $rs, array $args) : Response {
 
-    // $username = $args['u'];
+    $username = $args['u'];
     // $password = $args['p'];
 
 
-    $cartes = Carte::select('nom_client')->get();
-    
-    $data = ['cc' => 'oui'];
-    
+    $cartes = Carte::where('mail_client', '=', $username)->get();
+
+    foreach ($cartes as $i => $c) {
+      $data[] = ["carte_$i" => $c];
+    }
+
+
+    $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+    $rs->getBody()->write(json_encode ($data));
+
+    return $rs;
+  }
+
+  /**
+   *
+   * public function Carte : liste toutes les cartes
+   *
+   * @return Response : la liste des cartes au format json
+   *
+   */
+  public function cartes(Request $rq, Response $rs, array $args) : Response {
+
+    $cartes = Carte::select()->get();
+
+    foreach ($cartes as $i => $c) {
+      $data[] = ["carte_$i" => $c];
+    }
+
+
+    $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+    $rs->getBody()->write(json_encode ($data));
+
+    return $rs;
+  }
+
+
+  /**
+   *
+   * public function aCarte : liste le détail de la carte en argument de l'URI
+   *
+   * @return Response : la liste des cartes au format json
+   *
+   */
+  public function aCarte(Request $rq, Response $rs, array $args) : Response {
+
+    // $username = $args['u'];
+    // $password = $args['p'];
+    $id = $args['id'];
+    $cartes = Carte::select()->where('id', '=', $id)->get();
+
     foreach ($cartes as $i => $c) {
       $data[] = ["carte_$i" => $c];
     }
@@ -45,45 +93,25 @@ class FidelisationController {
 
     /**
      *
-     * public function fidelisations : liste toutes les fidelisations
+     * public function comCarte : liste le détail de la cartes en argument de l'URI
      *
-     * @return Response : la liste des fidelisations au format json
+     * @return Response : la liste des commandes de la carte au format json
      *
      */
-    public function cartes(Request $rq, Response $rs, array $args) : Response {
-        $cartes = Carte::select('id', 'mail', 'livraison', 'montant', 'nom', 'status', 'token')->get();
+    public function comCarte(Request $rq, Response $rs, array $args) : Response {
 
-        //* Mise en forme de toutes les cartes en tableau
-        $tab_commandes = [];
+        // $username = $args['u'];
+        // $password = $args['p'];
+        $id = $args['id'];
+        $comCartes = Commande::select()->where('carte_id', '=', $id)->get();
 
-        foreach ($cartes as $carte) {
-
-            $tab_commandes[] = [
-                "commande"=>[
-                    "token" => $carte->token,
-                    "id" => $carte->id,
-                    "nom" => $carte->nom,
-                    "date_livraison" => date('Y-m-d', strtotime($carte->livraison)),
-                    "statut" => $this->commandStatus($carte->status),
-                    "montant" => $carte->montant,
-                ],
-                "links"=>[
-                    "self"=> "/commandes/" . $carte->id . "?token=" . $carte->token . "/"
-                ]];
+        foreach ($comCartes as $i => $c) {
+            $data[] = ["carte_$i" => $c];
         }
-
-        //* Mise en forme de la collection de commande
-        $data = [
-            'type' => 'collection',
-            'count' => count($cartes),
-            'commandes' => $tab_commandes
-        ];
-
 
         $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
         $rs->getBody()->write(json_encode ($data));
 
         return $rs;
     }
-  
 }
