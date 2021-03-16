@@ -24,10 +24,10 @@ $db->bootEloquent();         /* établir la connexion */
 //* Les objets de type requête
 $app->get('/login[/]', FidelisationController::class . ':login');
 
-$app->post('/fidelisation[/]', FidelisationController::class . ':fidelisations');
+$app->post('/cartes[/]', FidelisationController::class . ':cartes');
 
-$app->post('/fidelisation[/]{id}', FidelisationController::class . ':aFidelisations')
-    ->setName('fidelisation');
+$app->post('/carte[/]{id}', FidelisationController::class . ':aCarte')
+    ->setName('Carte');
 
 //* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
 try {
