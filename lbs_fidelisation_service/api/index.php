@@ -26,7 +26,7 @@ $app->get('/login[/]', FidelisationController::class . ':login');
 
 $app->post('/fidelisation[/]', FidelisationController::class . ':fidelisations');
 
-$app->post('/fidelisation[/]{id}', FidelisationController::class . ':aFidelisations')
+$app->post('/fidelisation/{id}[/]', FidelisationController::class . ':aFidelisation')
     ->setName('fidelisation');
 
 //* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
