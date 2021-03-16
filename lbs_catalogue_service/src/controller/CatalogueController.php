@@ -82,10 +82,7 @@ class CatalogueController {
                 ]
             ];
     
-            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($data));
-            
-            return $rs;
+            return Writer::json_output($rs, 200, $data);
 
         }catch(ModelNotFoundException $e){
             return Writer::json_error($rs, 404, "catalogue not found");
@@ -131,10 +128,7 @@ class CatalogueController {
                 'sandwich' => $tab_sandwich,
             ];
 
-            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($data));
-            
-            return $rs;
+            return Writer::json_output($rs, 200, $data);
 
 
         }catch(ModelNotFoundException $e){
@@ -174,10 +168,7 @@ class CatalogueController {
                 'categories' => $tab_categories,
             ];
 
-            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($data));
-            
-            return $rs;
+            return Writer::json_output($rs, 200, $data);
 
 
         }catch(ModelNotFoundException $e){

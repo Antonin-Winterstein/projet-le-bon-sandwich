@@ -1,6 +1,7 @@
 <?php
 
 require_once  __DIR__ . '/../src/vendor/autoload.php';
+use lbs\fidelisation\controller\AuthController;
 use lbs\fidelisation\controller\FidelisationController;
 
 
@@ -22,7 +23,7 @@ $db->setAsGlobal();          /* rendre la connexion visible dans tout le projet 
 $db->bootEloquent();         /* établir la connexion */
 
 //* Les objets de type requête
-$app->get('/login[/]', FidelisationController::class . ':login');
+$app->post('/cartes/{id}/login[/]', AuthController::class . ':login');
 
 $app->post('/fidelisation[/]', FidelisationController::class . ':fidelisations');
 

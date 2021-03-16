@@ -45,10 +45,7 @@ class CategoriesController {
                 'categories' => $tab_categ,
             ];
     
-            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($data));
-            
-            return $rs;
+            return Writer::json_output($rs, 200, $data);
         } catch (ModelNotFoundException $e) {
             return Writer::json_error($rs, 404, "categories not found");
         }
@@ -82,10 +79,8 @@ class CategoriesController {
 
             ];
 
-            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($data));
-            
-            return $rs;
+            return Writer::json_output($rs, 200, $data);
+
         } catch (ModelNotFoundException $e) {
             return Writer::json_error($rs, 404, "category $id not found");
         }
@@ -122,12 +117,9 @@ class CategoriesController {
                 'date' => date('d-m-Y'),
                 'sandwichs' => $tab_sandwichs,
             ];
-    
 
-            $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-            $rs->getBody()->write(json_encode($data));
+            return Writer::json_output($rs, 200, $data);
             
-            return $rs;
         } catch (ModelNotFoundException $e) {
             return Writer::json_error($rs, 404, "category $id not found");
         }
