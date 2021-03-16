@@ -10,7 +10,12 @@ class Carte extends Model {
   protected $table = 'carte_fidelite';
   protected $primaryKey = 'id';
 
-  public $keyType = 'string';
+  public $keyType='string';
+
+  public function commande() {
+      return $this->hasMany('lbs\fidelisation\models\Commande', 'carte_id');
+  }
+
   // protected $fillable = ['id', 'nom', 'mail', 'livraison', 'token'];
   // protected $hidden = ['created_at', 'updated_at'];
 }

@@ -25,10 +25,15 @@ $db->bootEloquent();         /* établir la connexion */
 //* Les objets de type requête
 $app->post('/cartes/{id}/login[/]', AuthController::class . ':login');
 
-$app->post('/fidelisation[/]', FidelisationController::class . ':fidelisations');
+//* Liste de toutes les cartes
+$app->get('/cartes[/]', FidelisationController::class . ':cartes');
 
-$app->post('/fidelisation/{id}[/]', FidelisationController::class . ':aFidelisation')
-    ->setName('fidelisation');
+//* Liste d'un seule carte
+$app->get('/cartes/{id}[/]', FidelisationController::class . ':aCarte')
+    ->setName('carte');
+
+//*Liste des commandes d'une carte
+$app->get('/cartes/{id}/commandes[/]', FidelisationController::class . ':comCarte');
 
 //* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
 try {

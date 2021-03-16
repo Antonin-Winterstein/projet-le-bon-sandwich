@@ -1,6 +1,7 @@
 <?php
 
 use lbs\commande\errors\BadUri;
+use lbs\commande\errors\NotAllowed;
 
 return [
   'notFoundHandler'=> function($c) {
@@ -11,7 +12,7 @@ return [
 
   'notAllowedHandler' => function($c) {
     return function ($rq, $rs, $methods) use ($c) {
-      return errors\NotAllowed::error($c, $rq, $rs, $methods);
+      return NotAllowed::error($c, $rq, $rs, $methods);
     };
   },
 

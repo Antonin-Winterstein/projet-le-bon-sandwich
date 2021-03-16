@@ -4,6 +4,8 @@ namespace lbs\fidelisation\controller;
 
 use lbs\fidelisation\models\Carte;
 use lbs\fidelisation\utils\Writer;
+
+use lbs\fidelisation\models\Commande;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -17,20 +19,18 @@ class FidelisationController {
 
   }
 
-  
+
   /**
-   * 
-   * public function login : liste toutes les commandes
-   * 
-   * @return Response : la liste des commandes au format json
-   * 
+   *
+   * public function Carte : liste toutes les cartes
+   *
+   * @return Response : la liste des cartes au format json
+   *
    */
-  public function fidelisations(Request $rq, Response $rs, array $args) : Response {
+  public function cartes(Request $rq, Response $rs, array $args) : Response {
 
     $cartes = Carte::select()->get();
-    
-    $data = ['cc' => 'oui'];
-    
+
     foreach ($cartes as $i => $c) {
       $data[] = ["carte_$i" => $c];
     }
@@ -38,25 +38,22 @@ class FidelisationController {
 
     return Writer::json_output($rs, 200, $data);
   }
-  
-  
+
+
   /**
-   * 
-   * public function login : liste toutes les commandes
-   * 
-   * @return Response : la liste des commandes au format json
-   * 
+   *
+   * public function aCarte : liste le détail de la carte en argument de l'URI
+   *
+   * @return Response : la liste des cartes au format json
+   *
    */
-  public function aFidelisation(Request $rq, Response $rs, array $args) : Response {
+  public function aCarte(Request $rq, Response $rs, array $args) : Response {
 
     // $username = $args['u'];
     // $password = $args['p'];
+    $id = $args['id'];
+    $cartes = Carte::select()->where('id', '=', $id)->get();
 
-
-    $cartes = Carte::select()->get();
-    
-    $data = ['cc' => 'oui'];
-    
     foreach ($cartes as $i => $c) {
       $data[] = ["carte_$i" => $c];
     }
@@ -67,7 +64,28 @@ class FidelisationController {
 
     return $rs;
   }
-  
 
+    /**
+     *
+     * public function comCarte : liste le détail de la cartes en argument de l'URI
+     *
+     * @return Response : la liste des commandes de la carte au format json
+     *
+     */
+    public function comCarte(Request $rq, Response $rs, array $args) : Response {
 
+        // $username = $args['u'];
+        // $password = $args['p'];
+        $id = $args['id'];
+        $comCartes = Commande::select()->where('carte_id', '=', $id)->get();
+
+        foreach ($comCartes as $i => $c) {
+            $data[] = ["carte_$i" => $c];
+        }
+
+        $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
+        $rs->getBody()->write(json_encode ($data));
+
+        return $rs;
+    }
 }
