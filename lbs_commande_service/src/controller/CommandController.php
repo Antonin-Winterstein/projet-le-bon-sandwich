@@ -201,7 +201,7 @@ class CommandController {
      * @return Response
      * 
      */
-    public function addCommand(Request $rq, Response $rs) : Response {
+    public function addCommand(Request $rq, Response $rs, array $args) : Response {
 
       if($rq->getAttribute('has_errors')){
         return Writer::json_error($rs, 400, $rq->getAttribute('errors'));
@@ -244,24 +244,54 @@ class CommandController {
      * @return Response
      * 
      */
-    public function payACommand(Request $rq, Response $rs) : Response {
+    public function payACommand(Request $rq, Response $rs, array $args) : Response {
     
-      $command_id = $rq->getQueryParams('id');
+      $command_id = $args['id'];
 
       $data = [
         'type' => 'action',
-        'message' => "commande $command_id payée",
+        'message' => $command_id,
       ];
       if($rq->getAttribute('fidelisation_token')){
 
+        $token = $rq->getAttribute('fidelisation_token');
+
         // Appel vers l'API de fidélisation de la commande 
         // pour ajouter les données de la commande sur la carte de l'utilisateur
-        // En cas de réussite :
-        $data[] = [
-          'fidelisee' => true
-        ];
+
+        //Ne fonctionne pas : 
+        /*
+
+        cURL error 7: Failed to connect to api.fidelisation.local port 19280: 
+        Connection refused (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) 
+        for http://api.fidelisation.local:19280/cartes/{id}/fidelisation
+
+          On a trouvé le problème (Le localhost d'un container hôte n'est pas le localhost cible de la requête --> ils ne peuvent communiquer)
+          On essayé de trouver des solutions (cf les liens ci-dessous mais sans succès)
+            https://laracasts.com/discuss/channels/laravel/guzzlehttp-exception-connectexception-curl-error-7-failed-to-connect-to-localhost-port-8087-connection-refused
+            https://stackoverflow.com/questions/49889795/php-guzzle-6-curl-error-7-connection-refused
+
+        */
+
+        $client = new \GuzzleHttp\Client();
+        $request = new \GuzzleHttp\Psr7\Request('POST', "http://api.fidelisation.local:19280/cartes/" . $token->cid ."/fidelisation", [
+          'auth' => ['user', 'pass']
+      ]);
+
+        $promise = $client->sendAsync($request)->then(function ($response) {
+          $data[] = [
+            'fidelisee' => true,
+            'status_code' => $response->getStatusCode(),
+            'fidelisation' => $response->getBody(),
+          ];
+        });
+
+        $promise->wait();
+        
+        return Writer::json_output($rs, 200, $data);
+
+
       };
-      return Writer::json_output($rs, 200, $data);
 
     }
     

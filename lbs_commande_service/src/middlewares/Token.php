@@ -21,7 +21,7 @@ class Token{
                 ->where('token', '=',$token)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            return Writer::json_error($rs, 200, 'Token Invalide');   
+            return Writer::json_error($rs, 401, 'Token Invalide');   
         }
 
         return $next($rq, $rs);

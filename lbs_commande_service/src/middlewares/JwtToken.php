@@ -22,25 +22,33 @@ class JwtToken{
         $token = JWT::decode($tokenstring, $secret, ['HS512']);
         return $token;
     }
-
-
+    
+    
     public function checkToken( Request $rq, Response $rs, callable $next)
     {
         if ($rq->hasHeader('Authorization')) {
             try {
                 $token = $this->decode($rq->getHeader('Authorization')[0]); 
             } catch (Exception $e) {
-                return Writer::json_error($rs, 401, "Token d'Authentification Invalide");
+                return Writer::json_error($rs, 401, $e);
             }
 
             $token_carte_id = $token->cid;
+
+            
+            $body_data = $rq->getParsedBody();
+
+            if (is_null($body_data) || is_null($body_data['id_carte'])) {
+                return Writer::json_error($rs, 400, "Pas d'id de carte");  
+            }
+
             $route_carte_id = $rq->getParsedBody()['id_carte'];
-    
+
             if ($route_carte_id != $token_carte_id) {
                 return Writer::json_error($rs, 401, 'Carte de Paiement invalide');
             }
 
-            $rq = $rq->withAttribute('fidelisation_token', true);
+            $rq = $rq->withAttribute('fidelisation_token', $token);
 
         }else{
             $rq = $rq->withAttribute('fidelisation_token', false);

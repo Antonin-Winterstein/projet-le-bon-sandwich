@@ -35,8 +35,9 @@ $app->get('/commandes/{id}[/]', CommandController::class . ':aCommand')
     ->add(Token::class . ':checkToken')
     ->setName('commande');
 
-$app->post('commandes/{id}/paiement[/]', CommandController::class . ':payACommand')
-    ->add(Token::class . ':checkToken')
+// $app->get('commandes/{id}/paiement[/]', CommandController::class . ':payACommand');
+$app->post('/commandes/{id}/pay[/]', CommandController::class . ':payACommand')
+    // ->add(Token::class . ':checkToken')
     ->add(JwtToken::class . ':checkToken');
 
 $validators = DataValidation::PostCommandValidators();

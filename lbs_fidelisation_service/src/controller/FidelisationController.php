@@ -32,7 +32,7 @@ class FidelisationController {
 
     $tab_cartes = [];
     foreach ($cartes as $carte) {
-      $tab_carte[] = [
+      $tab_cartes[] = [
         "carte" => [
           'id' => $carte->id,
           'nom' => $carte->nom_client,
@@ -81,12 +81,9 @@ class FidelisationController {
       'links' => [
         "commandes" => ['href' => $this->c->router->pathFor('commandesCarte', ['id'=> $carte->id])]
       ]
-    ];
+    ]; 
 
-    $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-    $rs->getBody()->write(json_encode ($data));
-
-    return $rs;
+    return Writer::json_output($rs, 200, $data);
   }
 
     /**
@@ -121,9 +118,27 @@ class FidelisationController {
           
         ];
 
-        $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
-        $rs->getBody()->write(json_encode ($data));
+        return Writer::json_output($rs, 200, $data);
+    }
 
-        return $rs;
+
+    /**
+     *
+     * public function fidelisation : fidelise une commande
+     *
+     * @return Response
+     *
+     */
+    public function fidelisation(Request $rq, Response $rs, array $args) : Response {
+        
+      
+      // $commande = $rq->getParsedBody()[0];
+      //On est censé récupérer les données de la commande dans le body
+      // Et mettre à jour les données sur la BDD fidélisation
+      // Or problème de communication de l'API Commande à l'API fidélisation
+      // (cf. CommandController - ligne 262)
+
+        return Writer::json_output($rs, 201, ['test' => 'test']);
+
     }
 }

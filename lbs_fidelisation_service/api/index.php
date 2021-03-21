@@ -34,6 +34,10 @@ $app->get('/cartes/{id}[/]', FidelisationController::class . ':aCarte')
     ->setName('carte')
     ->add(JwtToken::class. ':checkToken');
 
+//* Liste d'un seule carte
+$app->post('/cartes/{id}/fidelisation[/]', FidelisationController::class . ':fidelisation');
+    // ->add(JwtToken::class. ':checkToken');
+
 //*Liste des commandes d'une carte
 $app->get('/cartes/{id}/commandes[/]', FidelisationController::class . ':commandesCarte')
     ->setName('commandesCarte');

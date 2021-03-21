@@ -59,11 +59,6 @@ class AuthController {
         return Writer::json_error($rs, 401, 'Erreur Authentification');
     }
 
-
-    // $usermail = $rq->getQueryParam('u', null);
-    // $password = $rq->getQueryParam('p', null);
-
-
     $secret = $this->c->settings['secret'];
     
     $data[] = ["carte" => $secret];

@@ -32,7 +32,7 @@ services:
       - ./lbs_commande_service/src:/var/www/src
     working_dir: /var/www/src
     networks:
-      - lbs.net
+      - default
     links:
       - mysql.commande:dbcom
       - api.catalogue:api.catalogue.local
@@ -54,7 +54,7 @@ services:
       - ./lbs_catalogue_service/src:/var/www/src
     working_dir: /var/www/src
     networks:
-      - lbs.net
+      - default
     links:
       - mongo.cat:dbcat
 #      - mysql.catalogue:dbcat
@@ -76,7 +76,7 @@ services:
       - ./lbs_fidelisation_service/src:/var/www/src
     working_dir: /var/www/src
     networks:
-      - lbs.net
+      - default
     links:
   #    - mongo.cat:dbcat
       - mysql.fidelisation:dbfid
@@ -100,7 +100,7 @@ services:
     ports:
       - '3307:3306'
     networks:
-      - lbs.net
+      - default
     volumes:
       - './lbs_commande_service/sql:/var/sql'
 
@@ -119,7 +119,7 @@ services:
     ports:
       - '3308:3306'
     networks:
-      - lbs.net
+      - default
     volumes:
       - './lbs_fidelisation_service/sql:/var/sql'
 
@@ -150,7 +150,7 @@ services:
     ports:
       - 8080:8080
     networks:
-      - lbs.net
+      - default
     links:
       - mysql.commande:command
       - mysql.fidelisation:fidelisation
@@ -166,13 +166,13 @@ services:
       - ./lbs_catalogue_service/data:/var/data
     working_dir: /var/data
     networks:
-      - lbs.net
+      - default
     ports:
       - 27018:27017
   mongo-express:
     image: mongo-express:latest
     networks:
-      - lbs.net
+      - default
     ports:
       - 8081:8081
     links:
