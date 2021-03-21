@@ -22,7 +22,7 @@ class FidelisationController {
 
   /**
    *
-   * public function Carte : liste toutes les cartes
+   * public function Cartes : liste toutes les cartes
    *
    * @return Response : la liste des cartes au format json
    *
@@ -49,15 +49,12 @@ class FidelisationController {
    */
   public function aCarte(Request $rq, Response $rs, array $args) : Response {
 
-    // $username = $args['u'];
-    // $password = $args['p'];
+    
+
     $id = $args['id'];
-    $cartes = Carte::select()->where('id', '=', $id)->get();
+    $carte = Carte::select()->where('id', '=', $id)->first();
 
-    foreach ($cartes as $i => $c) {
-      $data[] = ["carte_$i" => $c];
-    }
-
+    $data[] = ["carte" => $carte];
 
     $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
     $rs->getBody()->write(json_encode ($data));
@@ -67,20 +64,17 @@ class FidelisationController {
 
     /**
      *
-     * public function comCarte : liste le détail de la cartes en argument de l'URI
+     * public function commmandesCarte : liste le détail de la cartes en argument de l'URI
      *
      * @return Response : la liste des commandes de la carte au format json
      *
      */
-    public function comCarte(Request $rq, Response $rs, array $args) : Response {
-
-        // $username = $args['u'];
-        // $password = $args['p'];
+    public function commandesCarte(Request $rq, Response $rs, array $args) : Response {
         $id = $args['id'];
-        $comCartes = Commande::select()->where('carte_id', '=', $id)->get();
+        $commandes = Commande::select()->where('carte_id', '=', $id)->get();
 
-        foreach ($comCartes as $i => $c) {
-            $data[] = ["carte_$i" => $c];
+        foreach ($commandes as $commande) {
+          $data[] = ["commandes" => $commande];
         }
 
         $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');

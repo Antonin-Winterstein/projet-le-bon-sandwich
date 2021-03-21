@@ -4,6 +4,7 @@ namespace lbs\fidelisation\controller;
 
 use Firebase\JWT\JWT;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use lbs\fidelisation\middlewares\JwtToken;
 use lbs\fidelisation\models\Carte;
 use lbs\fidelisation\utils\Writer;
 use \Psr\Http\Message\ResponseInterface as Response;
@@ -35,7 +36,6 @@ class AuthController {
         return Writer::json_error($rs, 401, 'Pas de header Authorization');
     }
 
-
     $tab_auth = explode(':', base64_decode(explode(" ", $rq->getHeader('Authorization')[0])[1]));
     $usermail = $tab_auth[0];
     $password = $tab_auth[1];
@@ -60,8 +60,8 @@ class AuthController {
     }
 
 
-    $usermail = $rq->getQueryParam('u', null);
-    $password = $rq->getQueryParam('p', null);
+    // $usermail = $rq->getQueryParam('u', null);
+    // $password = $rq->getQueryParam('p', null);
 
 
     $secret = $this->c->settings['secret'];
