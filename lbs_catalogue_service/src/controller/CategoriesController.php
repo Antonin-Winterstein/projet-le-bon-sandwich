@@ -16,7 +16,15 @@ class CategoriesController {
     
     }
 
-    
+    /**
+     * 
+     * public function categories : liste les catégories
+     * 
+     * @param Request $rq
+     * @param Response $rs
+     * @return Response : liste les catégories au format json
+     * 
+     */
     public function categories(Request $rq, Response $rs, array $args) : Response {
 
         try {
@@ -53,6 +61,15 @@ class CategoriesController {
 
     }
 
+    /**
+     * 
+     * public function aCategory : affiche le détail d'une catégorie
+     * 
+     * @param Request $rq
+     * @param Response $rs
+     * @return Response : affiche la catégorie au format json
+     * 
+     */
     public function aCategory(Request $rq, Response $rs, array $args) : Response {
         
         $id = intval($args['id']);
@@ -86,6 +103,15 @@ class CategoriesController {
         }
     }
 
+    /**
+     * 
+     * public function aCategorySandwichs : liste les sandwichs d'une catégorie
+     * 
+     * @param Request $rq
+     * @param Response $rs
+     * @return Response : lsite les sandwichs de la catégorie au format json
+     * 
+     */
     public function aCategorySandwichs(Request $rq, Response $rs, array $args) : Response {
         
         $id = intval($args['id']);

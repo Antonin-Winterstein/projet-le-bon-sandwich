@@ -19,7 +19,6 @@ class FidelisationController {
 
   }
 
-
   /**
    *
    * public function Cartes : liste toutes les cartes
@@ -31,10 +30,26 @@ class FidelisationController {
 
     $cartes = Carte::select()->get();
 
-    foreach ($cartes as $i => $c) {
-      $data[] = ["carte_$i" => $c];
+    $tab_cartes = [];
+    foreach ($cartes as $carte) {
+      $tab_carte[] = [
+        "carte" => [
+          'id' => $carte->id,
+          'nom' => $carte->nom_client,
+          'mail' => $carte->mail_client,
+        ],
+        "links"=>[
+          "self"=> ['href' => $this->c->router->pathFor('carte', ['id'=> $carte->id])],
+          "commandes"=> ['href' => $this->c->router->pathFor('commandesCarte', ['id'=> $carte->id])],
+      ],
+      ];
     }
 
+    $data = [
+      'type' => 'collection',
+      'count' => count($cartes),
+      'commandes' => $tab_cartes,
+    ];
 
     return Writer::json_output($rs, 200, $data);
   }
@@ -49,12 +64,24 @@ class FidelisationController {
    */
   public function aCarte(Request $rq, Response $rs, array $args) : Response {
 
-    
-
     $id = $args['id'];
     $carte = Carte::select()->where('id', '=', $id)->first();
 
-    $data[] = ["carte" => $carte];
+    $tab_carte = [
+      'id' => $carte->id,
+      'nom' => $carte->nom_client,
+      'mail' => $carte->mail_client,
+      'cumul_achats' => $carte->cumul_achats,
+      'cumul_commandes' => $carte->cumul_commandes
+    ];
+
+    $data = [
+      'type' => 'resource',
+      'carte' => $tab_carte,
+      'links' => [
+        "commandes" => ['href' => $this->c->router->pathFor('commandesCarte', ['id'=> $carte->id])]
+      ]
+    ];
 
     $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
     $rs->getBody()->write(json_encode ($data));
@@ -64,7 +91,7 @@ class FidelisationController {
 
     /**
      *
-     * public function commmandesCarte : liste le détail de la cartes en argument de l'URI
+     * public function commmandesCarte : liste les commandes de la carte en argument de l'URI
      *
      * @return Response : la liste des commandes de la carte au format json
      *
@@ -73,9 +100,26 @@ class FidelisationController {
         $id = $args['id'];
         $commandes = Commande::select()->where('carte_id', '=', $id)->get();
 
+        $tab_commandes = [];
         foreach ($commandes as $commande) {
-          $data[] = ["commandes" => $commande];
+          $tab_commandes[] = [
+            "commande"=>[
+              "id" => $commande->id,
+              "date" => date('Y-m-d', strtotime($commande->created_at)),
+              "montant" => $commande->montant,
+            ],
+          ];
         }
+        
+        $data = [
+          'type' => 'collection',
+          'count' => count($commandes),
+          'links' => [
+            'self' => ['href' => $this->c->router->pathFor('id', ['id'=> $id])],
+          ],
+          'commandes' => $tab_commandes,
+          
+        ];
 
         $rs = $rs->withStatus(200)->withHeader('Content-Type', 'application/json;charset=utf-8');
         $rs->getBody()->write(json_encode ($data));

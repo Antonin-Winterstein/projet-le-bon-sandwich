@@ -82,6 +82,8 @@ class CommandController {
    * 
    * public function commands : liste toutes les commandes
    * 
+   * @param Request $rq
+   * @param Response $rs
    * @return Response : la liste des commandes au format json
    * 
    */
@@ -103,7 +105,7 @@ class CommandController {
           "montant" => $commande->montant,
         ],
         "links"=>[
-          "self"=> "/commandes/" . $commande->id . "?token=" . $commande->token . "/"
+          "self" => ['href' => $this->c->router->pathFor('commande', ['id'=> $commande->id], ['token' => $commande->token])],
       ]];
     }
 
@@ -125,7 +127,9 @@ class CommandController {
   /**
    * 
    * public function aCommand : liste le détail de la commande en argument de l'URI
-   * 
+   *   
+   * @param Request $rq
+   * @param Response $rs
    * @return Response : le détail d'une commande au format json
    * 
    */
@@ -133,6 +137,8 @@ class CommandController {
 
     $id = $args['id'];
     $token = $rq->getQueryParam('token', null);
+
+
     try {
       $commande = Commande::select(['id', 'livraison', 'nom', 'mail', 'status', 'montant', 'token'])->with('items')->where('id', '=', $id)->where('token', '=', $token)->firstOrFail();
       
@@ -156,8 +162,7 @@ class CommandController {
       //* Mise en forme de tous les attributs de la ressource
       $tab_commande[] = [
           "links"=>[
-              "self"=> "/commandes/" . $commande->id . "?token=" . $commande->token . "/",
-              "items"=> "/commandes/" .$commande->id . "/items"
+              "self" => ['href' => $this->c->router->pathFor('commande', ['id'=> $commande->id], ['token' => $commande->token])],
           ],
           "commande"=>[
             "token" => $commande->token,
@@ -198,31 +203,19 @@ class CommandController {
      */
     public function addCommand(Request $rq, Response $rs) : Response {
 
+      if($rq->getAttribute('has_errors')){
+        return Writer::json_error($rs, 400, $rq->getAttribute('errors'));
+      }
+
       $commande_data = $rq->getParsedBody();
-
-      if (!isset($commande_data['nom_client'])) {
-        return Writer::json_error($rs, 400, " information manquante : nom_client");
-      }
-
-      if (!isset($commande_data['mail_client'])) {
-        return Writer::json_error($rs, 400, " information manquante : mail_client");
-      }
-
-      if (!isset($commande_data['livraison']['date'])) {
-        return Writer::json_error($rs, 400, " information manquante : livraison(date)");
-      }
-
-      if (!isset($commande_data['livraison']['heure'])) {
-        return Writer::json_error($rs, 400, " information manquante : livraison(heure)");
-      }
 
       try {
 
         $c = new Commande();
 
         $c->id = Uuid::uuid4();
-        $c->nom = filter_var($commande_data['nom_client'], FILTER_SANITIZE_STRING);
-        $c->mail = filter_var($commande_data['mail_client'], FILTER_SANITIZE_EMAIL);
+        // $c->nom = filter_var($commande_data['nom_client'], FILTER_SANITIZE_STRING);
+        // $c->mail = filter_var($commande_data['mail_client'], FILTER_SANITIZE_EMAIL);
         $c->livraison = \Datetime::createFromFormat('d-m-Y H:i',
           $commande_data['livraison']['date'] . ' ' .
           $commande_data['livraison']['heure']);
@@ -242,4 +235,34 @@ class CommandController {
 
     }
   
+    /**
+     * 
+     * public function payACommand : paiement de la commande
+     * 
+     * @param Request $rq
+     * @param Response $rs
+     * @return Response
+     * 
+     */
+    public function payACommand(Request $rq, Response $rs) : Response {
+    
+      $command_id = $rq->getQueryParams('id');
+
+      $data = [
+        'type' => 'action',
+        'message' => "commande $command_id payée",
+      ];
+      if($rq->getAttribute('fidelisation_token')){
+
+        // Appel vers l'API de fidélisation de la commande 
+        // pour ajouter les données de la commande sur la carte de l'utilisateur
+        // En cas de réussite :
+        $data[] = [
+          'fidelisee' => true
+        ];
+      };
+      return Writer::json_output($rs, 200, $data);
+
+    }
+    
 }

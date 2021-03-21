@@ -35,7 +35,8 @@ $app->get('/cartes/{id}[/]', FidelisationController::class . ':aCarte')
     ->add(JwtToken::class. ':checkToken');
 
 //*Liste des commandes d'une carte
-$app->get('/cartes/{id}/commandes[/]', FidelisationController::class . ':commandesCarte');
+$app->get('/cartes/{id}/commandes[/]', FidelisationController::class . ':commandesCarte')
+    ->setName('commandesCarte');
 
 //* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
 try {

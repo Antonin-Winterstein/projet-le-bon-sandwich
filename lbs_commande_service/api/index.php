@@ -3,7 +3,10 @@
 require_once  __DIR__ . '/../src/vendor/autoload.php';
 
 use lbs\commande\controller\CommandController;
+use lbs\commande\middlewares\DataValidation;
+use lbs\commande\middlewares\JwtToken;
 use lbs\commande\middlewares\Token;
+use Symfony\Component\Console\Command\Command;
 
 $api_settings = require_once __DIR__ . '/../src/conf/api_settings.php';
 $api_errors = require_once __DIR__ . '/../src/conf/api_errors.php';
@@ -32,14 +35,13 @@ $app->get('/commandes/{id}[/]', CommandController::class . ':aCommand')
     ->add(Token::class . ':checkToken')
     ->setName('commande');
 
-$app->post('/commandes[/]', CommandController::class . ':addCommand');
+$app->post('commandes/{id}/paiement[/]', CommandController::class . ':payACommand')
+    ->add(Token::class . ':checkToken')
+    ->add(JwtToken::class . ':checkToken');
 
-//! Sur Internet ou Postman écrire une URL de ce genre pour lister toutes les commandes :
-//! http://localhost/TD1_ROUTES_JSON/app/commandes
-
-#use \Psr\Http\Message\ServerRequestInterface as Request ;
-#use \Psr\Http\Message\ResponseInterface as Response ;
-
+$validators = DataValidation::PostCommandValidators();
+$app->post('/commandes[/]', CommandController::class . ':addCommand')
+    ->add(new \DavidePastore\Slim\Validation\Validation($validators));
 
 //* Déclenche le traitement par le framework de la requête courante et la compare dans l'ordre de chacune des routes
 try {

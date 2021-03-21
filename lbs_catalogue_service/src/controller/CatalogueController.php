@@ -16,7 +16,16 @@ class CatalogueController {
     
     }
 
-    
+    /**
+     * 
+     * public function sandwichs : liste tous les sandwichs
+     * Possibilité de trier, changer l'ordre, paginer
+     * 
+     * @param Request $rq
+     * @ param Response $rs
+     * @return Response : la liste des sandwichs au format json
+     * 
+     */
     public function sandwichs(Request $rq, Response $rs, array $args) : Response {
         try{
             $db = MongoConnection::getCatalogue();
@@ -89,6 +98,15 @@ class CatalogueController {
         }
     }
 
+    /**
+     * 
+     * public function aSandwich : affiche le détail d'un sandwich
+     * 
+     * @param Request $rq
+     * @param Response $rs
+     * @return Response : le sandwich au format json
+     * 
+     */
     public function aSandwich(Request $rq, Response $rs, array $args) : Response {
         
         $ref = $args['ref'];
@@ -136,6 +154,15 @@ class CatalogueController {
         }
     }
 
+    /**
+     * 
+     * public function aSandwichCategories : affiche les catégories d'un sandwich
+     * 
+     * @param Request $rq
+     * @param Response $rs
+     * @return Response : les catégories du sandwich au format json
+     * 
+     */
     public function aSandwichCategories(Request $rq, Response $rs, array $args) : Response {
 
         $ref = $args['ref'];

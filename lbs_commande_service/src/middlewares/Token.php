@@ -3,6 +3,7 @@
 namespace lbs\commande\middlewares;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use lbs\commande\utils\Writer;
 use lbs\commande\models\Commande;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -20,8 +21,7 @@ class Token{
                 ->where('token', '=',$token)
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
-            // générer une erreur
-            return $rs ;
+            return Writer::json_error($rs, 200, 'Token Invalide');   
         }
 
         return $next($rq, $rs);
